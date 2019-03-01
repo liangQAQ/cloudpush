@@ -1,0 +1,11 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: portal
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka

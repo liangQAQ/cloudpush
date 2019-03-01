@@ -10,3 +10,21 @@ eureka:
       defaultZone: http://localhost:8000/eureka
   server:
     enable-self-preservation: false
+
+spring:
+  redis:
+    host: 10.9.216.1
+    port: 6379
+#    集群环境打开下面注释，单机不需要打开
+#    cluster:
+#      集群信息
+#      nodes: xxx.xxx.xxx.xxx:xxxx,xxx.xxx.xxx.xxx:xxxx,xxx.xxx.xxx.xxx:xxxx
+#      #默认值是5 一般当此值设置过大时，容易报：Too many Cluster redirections
+#      maxRedirects: 3
+ #   password:
+    timeout: 3000ms
+    jedis:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-wait: -1ms
