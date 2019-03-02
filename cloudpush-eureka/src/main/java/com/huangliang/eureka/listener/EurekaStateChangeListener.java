@@ -39,7 +39,7 @@ public class EurekaStateChangeListener {
     public void listen(EurekaInstanceRegisteredEvent eurekaInstanceRegisteredEvent) {
         InstanceInfo instanceInfo = eurekaInstanceRegisteredEvent.getInstanceInfo();
 
-        redisTemplate.opsForHash().put(RedisPrefix.SERVER_COUNT,instanceInfo.getAppName(),0);
+        redisTemplate.opsForHash().put(RedisPrefix.SERVER,instanceInfo.getAppName(),0);
         log.info("服务注册事件:"+instanceInfo.getAppName()+"-"+instanceInfo.getIPAddr()+"-"+instanceInfo.getStatus());
     }
 
