@@ -1,12 +1,12 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
-import com.huangliang.websocket.constants.CommonConsts;
-import com.huangliang.websocket.constants.Constants;
-import com.huangliang.websocket.constants.ErrorConstants;
-import com.huangliang.websocket.entity.Websocket;
-import com.huangliang.websocket.entity.response.Message;
-import com.huangliang.websocket.service.HttpResponseHandler;
-import com.huangliang.websocket.util.NettyUtil;
+import com.huangliang.cloudpushwebsocket.constants.CommonConsts;
+import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
+import com.huangliang.cloudpushwebsocket.entity.Websocket;
+import com.huangliang.cloudpushwebsocket.entity.response.Message;
+import com.huangliang.cloudpushwebsocket.service.HttpResponseHandler;
+import com.huangliang.cloudpushwebsocket.util.NettyUtil;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

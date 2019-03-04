@@ -12,7 +12,6 @@ import java.io.StringWriter;
 /**
  * json转换工具类
  */
-@SuppressWarnings("unchecked")
 public class JsonUtil
 {
     private static final Logger log = null;

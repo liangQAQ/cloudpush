@@ -1,12 +1,21 @@
-netty:
-  port: 7000
-  url: 127.0.0.1
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 10
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+
+server:
+  port: 9000
+
 spring:
   application:
     name: websocket
 
 redis:
-  host: 127.0.0.1
+  host: 10.9.216.1
   port: 6379
   pool:
     max-active: 8

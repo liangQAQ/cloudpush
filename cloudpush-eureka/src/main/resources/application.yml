@@ -1,5 +1,5 @@
 server:
-  port: 8000 #
+  port: 8000
 eureka:
   instance:
     hostname: eureka-server
@@ -7,10 +7,10 @@ eureka:
     register-with-eureka: false #
     fetch-registry: false #
     service-url:
-      defaultZone: http://localhost:8000/eureka
+      defaultZone: http://localhost:8000/eureka/
   server:
-    enable-self-preservation: false
-
+    enable-self-preservation: false #关闭自我保护机制
+    eviction-interval-timer-in-ms: 5000 #扫描服务在线的时长
 spring:
   redis:
     host: 10.9.216.1

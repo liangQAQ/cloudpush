@@ -33,13 +33,13 @@ public class EurekaStateChangeListener {
 
     /**
      * 服务注册事件
-     * @param eurekaInstanceRegisteredEvent
+     * @param event
      */
-    @EventListener
-    public void listen(EurekaInstanceRegisteredEvent eurekaInstanceRegisteredEvent) {
-        InstanceInfo instanceInfo = eurekaInstanceRegisteredEvent.getInstanceInfo();
+    @EventListener(condition = "#event.replication==false")
+    public void listen(EurekaInstanceRegisteredEvent event) {
+        InstanceInfo instanceInfo = event.getInstanceInfo();
 
-        redisTemplate.opsForHash().put(RedisPrefix.SERVER,instanceInfo.getAppName(),0);
+        redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getAppName(),0);
         log.info("服务注册事件:"+instanceInfo.getAppName()+"-"+instanceInfo.getIPAddr()+"-"+instanceInfo.getStatus());
     }
 
@@ -53,6 +53,7 @@ public class EurekaStateChangeListener {
      */
     @EventListener
     public void listen(EurekaInstanceRenewedEvent event) {
+        log.info("服务续约事件");
     }
 
     @EventListener
