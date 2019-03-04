@@ -1,6 +1,6 @@
 package com.huangliang.api.constants;
 
 public interface RedisPrefix {
-    //set
-    public static String WEBSOCKETSERVER = "websocketserver";
+    //hash<ip:port,nettyPort>
+    public static String WEBSOCKETSERVER = "websocket";
 }

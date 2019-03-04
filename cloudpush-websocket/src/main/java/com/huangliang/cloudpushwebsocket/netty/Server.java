@@ -1,5 +1,6 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
+import com.huangliang.api.constants.RedisPrefix;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -11,7 +12,13 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @Component
 @Slf4j
@@ -24,14 +31,20 @@ public class Server {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    private Channel channel;
+    @Value("${eureka.instance.instance-id}")
+    private String instanceId;
 
     @Autowired
     private ServerInitializer serverInitializer;
 
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
+
+    private Channel channel;
+
 
     /**
-     * 启动服务
+     * 启动netty服务
      */
     public ChannelFuture start () {
         ChannelFuture f = null;
@@ -42,7 +55,10 @@ public class Server {
                     .childHandler(serverInitializer)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
+            //启动netty服务绑定端口
             f = bind(b,InitPort);
+            channel = f.channel();
+            //服务初始化
             init();
         } catch (Exception e) {
             log.error("Netty start error:", e);
@@ -78,9 +94,14 @@ public class Server {
     }
 
     private void init(){
-        //设置redis中记录的websocket服务的端口
-
-        //创建该websocket服务所使用的rocketmq
+        //设置redis中记录的websocket服务地址的连接端口
+        if(redisTemplate.opsForHash().hasKey(RedisPrefix.WEBSOCKETSERVER,instanceId)){
+            redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceId,nettyPort);
+            log.info("设置实例[{}]的netty端口为[{}].",instanceId,nettyPort);
+        }else{
+            log.info("不存在[{}]的实例.",instanceId);
+        }
+        //创建该websocket服务所使用的rocketmq对应的topic
     }
 
     public void destroy() {

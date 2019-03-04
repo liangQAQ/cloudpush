@@ -1,21 +1,28 @@
+server:
+  port: 9003 #内置tomcat启动的端口号(集群需不同名)
+
 eureka:
   instance:
-    prefer-ip-address: true
+    prefer-ip-address: true  # 访问路径可以显示IP地址
     lease-renewal-interval-in-seconds: 5      # 心跳时间，即服务续约间隔时间（缺省为30s）
     lease-expiration-duration-in-seconds: 10
+    instance-id: 127.0.0.1:9003   #显示服务名称(ip:port集群需不同名)
   client:
     service-url:
       defaultZone: http://localhost:8000/eureka/
-
-server:
-  port: 9000
-
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: health,info
+        exclude:
 spring:
   application:
     name: websocket
 
 redis:
-  host: 10.9.216.1
+  host: 127.0.0.1
+  #host: 10.9.216.1
   port: 6379
   pool:
     max-active: 8

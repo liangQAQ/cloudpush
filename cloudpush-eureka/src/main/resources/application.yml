@@ -13,7 +13,8 @@ eureka:
     eviction-interval-timer-in-ms: 5000 #扫描服务在线的时长
 spring:
   redis:
-    host: 10.9.216.1
+    host: 127.0.0.1
+    #host: 10.9.216.1
     port: 6379
 #    集群环境打开下面注释，单机不需要打开
 #    cluster:
