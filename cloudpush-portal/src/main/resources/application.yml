@@ -8,4 +8,14 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8000/eureka
+      defaultZone: http://localhost:8000/eureka/
+redis:
+  #host: 127.0.0.1
+  host: 10.9.216.1
+  port: 6379
+  pool:
+    max-active: 8
+    max-wait: 1
+    max-idle: 8
+    min-idle: 0
+  timeout: 0
