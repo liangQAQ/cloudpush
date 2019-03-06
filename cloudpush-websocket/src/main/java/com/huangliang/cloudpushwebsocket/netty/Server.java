@@ -25,7 +25,7 @@ import java.net.UnknownHostException;
 public class Server {
 
     private static final int InitPort = 9000;
-    private static int nettyPort = 0;
+    private static String nettyPort = "";
     private static final String url = "127.0.0.1";
 
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -84,7 +84,7 @@ public class Server {
             public void operationComplete(Future<? super Void> future) {
                 if (future.isSuccess()) {
                     log.info("netty端口在[" + port + "]启动成功!");
-                    nettyPort = port;
+                    nettyPort = port+"";
                 } else {
                     log.info("netty端口在[" + port + "]启动失败,继续尝试启动...");
                     bind(serverBootstrap, port + 1);
