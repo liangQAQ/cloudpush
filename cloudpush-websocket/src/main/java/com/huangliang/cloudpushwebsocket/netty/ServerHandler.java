@@ -23,12 +23,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @ChannelHandler.Sharable
 @Component
 public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 
-    private static ChannelGroup group;
+    private static Map channels = new ConcurrentHashMap(1000);
 	
 	private static Logger log = null;
 
@@ -99,7 +100,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 		if (handshaker == null) {
 			WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
 		} else {
-//			handshaker.handshake(ctx.channel().attr("channelId").set(channelId);, req);
+			handshaker.handshake(ctx.channel(), req);
 			//存redis缓存
             redisTemplate.opsForValue().set("websocket_"+channelId,new Websocket(channelId,ctx.channel()));
 			//以websocket的形式将标识返回

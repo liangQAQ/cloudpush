@@ -13,6 +13,9 @@ eureka:
 spring:
   application:
     name: websocket
+  rocketmq:
+        name-server: 10.9.216.1:9876
+        producer-send-msg-timeout: 3000
 management:
   endpoints:
     jmx:
