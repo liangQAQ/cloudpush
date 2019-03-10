@@ -15,7 +15,9 @@ import org.springframework.stereotype.Component;
 public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 
 	@Autowired
-	private ServerHandler serverHandler;
+	private WebsocketRequestHandler websocketRequestHandler;
+	@Autowired
+	private HttpRequestHandler httpRequestHandler;
 
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
@@ -24,6 +26,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new ChunkedWriteHandler());
 		// 自己的逻辑Handler
-		pipeline.addLast(serverHandler);
+		pipeline.addLast(httpRequestHandler);
+		pipeline.addLast(websocketRequestHandler);
 	}
 }

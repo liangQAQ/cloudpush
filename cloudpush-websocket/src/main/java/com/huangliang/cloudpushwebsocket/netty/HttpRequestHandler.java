@@ -1,37 +1,41 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
+import com.huangliang.api.constants.RedisPrefix;
+import com.huangliang.api.util.ObjUtils;
 import com.huangliang.cloudpushwebsocket.constants.CommonConsts;
 import com.huangliang.cloudpushwebsocket.constants.Constants;
 import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
-import com.huangliang.cloudpushwebsocket.entity.Websocket;
+import com.huangliang.api.entity.Client;
 import com.huangliang.cloudpushwebsocket.entity.response.Message;
 import com.huangliang.cloudpushwebsocket.service.HttpResponseHandler;
 import com.huangliang.cloudpushwebsocket.util.NettyUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.HttpRequestHandler;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ChannelHandler.Sharable
 @Component
-public class ServerHandler extends SimpleChannelInboundHandler<Object> {
+@Slf4j
+public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
-    private static Map channels = new ConcurrentHashMap(1000);
-	
-	private static Logger log = null;
+	public static Map<String,Channel> channels = new ConcurrentHashMap(1000);
+
+	@Value("${eureka.instance.instance-id}")
+	public String instanceId;
 
     @Autowired
 	private RedisTemplate redisTemplate;
@@ -44,25 +48,11 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 	private WebSocketServerHandshaker handshaker;
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, Object msg){
+	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg){
 		try {
-			/**
-			 * HTTP接入，WebSocket第一次连接使用HTTP连接,用于握手
-			 */
-			if (msg instanceof FullHttpRequest) {
-				shakeHandsHandler(ctx, (FullHttpRequest) msg);
-//				httpRequestHandler.handler(ctx, (FullHttpRequest) msg);
-			}
-//			/**
-//			 * Websocket 消息请求
-//			 */
-			else if (msg instanceof WebSocketFrame) {
-//				WebsocketRequestHandler.handler(ctx, (WebSocketFrame) msg);
-			}
+			shakeHandsHandler(ctx, msg);
 		} catch (Exception e) {
 		    e.printStackTrace();
-//			log.error("请求异常",e);
-//			httpResponseHandler.responseFailed(ctx);
 		}
 
 	}
@@ -85,10 +75,16 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 	private void shakeHandsHandler(ChannelHandlerContext ctx, FullHttpRequest req){
 		//解析握手请求
 		String channelId = "";
+		Channel channel = null;
 		Map<String,String> requestParam = NettyUtil.getRequestParams(req);
 		if(requestParam.containsKey(Constants.CHANNELID))
 		{
 			channelId = requestParam.get(Constants.CHANNELID);
+			if(StringUtils.isNotEmpty(channelId)){
+				//赋值客户端连接对象
+				channel = ctx.channel();
+				channel.attr(Constants.attrChannelId).set(channelId);
+			}
 		}else{
 			httpResponseHandler.responseJson(ctx, new Message(CommonConsts.SUCCESS, ErrorConstants.ErrorChannelId));
 			log.error("握手失败:缺少channelId");
@@ -101,8 +97,12 @@ public class ServerHandler extends SimpleChannelInboundHandler<Object> {
 			WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
 		} else {
 			handshaker.handshake(ctx.channel(), req);
-			//存redis缓存
-            redisTemplate.opsForValue().set("websocket_"+channelId,new Websocket(channelId,ctx.channel()));
+			channels.put(channelId,channel);
+			log.info(channels.get(channelId).attr(Constants.attrChannelId).get());
+			//缓存客户端信息
+            redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceId)));
+            //缓存服务端与客户端关联信息
+			redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
 			//以websocket的形式将标识返回
 			ctx.channel().writeAndFlush(new TextWebSocketFrame(channelId));
 		}

@@ -1,6 +1,7 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
 import com.huangliang.api.constants.RedisPrefix;
+import com.huangliang.cloudpushwebsocket.constants.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -32,7 +33,7 @@ public class Server {
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     @Value("${eureka.instance.instance-id}")
-    private String instanceId;
+    public String instanceId;
 
     @Autowired
     private ServerInitializer serverInitializer;
@@ -95,12 +96,7 @@ public class Server {
 
     private void init(){
         //设置redis中记录的websocket服务地址的连接端口
-        if(redisTemplate.opsForHash().hasKey(RedisPrefix.WEBSOCKETSERVER,instanceId)){
-            redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceId,nettyPort);
-            log.info("设置实例[{}]的netty端口为[{}].",instanceId,nettyPort);
-        }else{
-            log.info("不存在[{}]的实例.",instanceId);
-        }
+        setRedisWebsocketPort();
         //创建该websocket服务所使用的rocketmq对应的topic
     }
 
@@ -108,5 +104,20 @@ public class Server {
         if(channel != null) { channel.close();}
         workerGroup.shutdownGracefully();
         bossGroup.shutdownGracefully();
+    }
+
+    private void setRedisWebsocketPort() {
+        if(redisTemplate.opsForHash().hasKey(RedisPrefix.WEBSOCKETSERVER,instanceId)){
+            redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceId,nettyPort);
+            log.info("设置实例[{}]的netty端口为[{}].",instanceId,nettyPort);
+        }else{
+            log.info("不存在[{}]的实例,netty初始化失败...",instanceId);
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                log.error(e.getMessage());
+//            }
+//            setRedisWebsocketPort();
+        }
     }
 }
