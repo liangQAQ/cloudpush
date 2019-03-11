@@ -1,11 +1,12 @@
 package com.huangliang.cloudpushportal.entity.response;
 
 import com.huangliang.api.constants.CommonConsts;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
-
+@Data
 public class DataList<T> implements Serializable
 {
 
@@ -90,66 +91,6 @@ public class DataList<T> implements Serializable
         {
             success = false;
         }
-    }
-
-    public int getTotalCount()
-    {
-        return totalCount;
-    }
-
-    public void setTotalCount(int totalCount)
-    {
-        this.totalCount = totalCount;
-    }
-
-    public String getRet()
-    {
-        return ret;
-    }
-
-    public void setRet(String ret)
-    {
-        this.ret = ret;
-    }
-
-    public boolean isSuccess()
-    {
-        return success;
-    }
-
-    public String getMsg()
-    {
-        return msg;
-    }
-
-    public void setMsg(String msg)
-    {
-        this.msg = msg;
-    }
-
-    public void setSuccess(boolean success)
-    {
-        this.success = success;
-    }
-
-    public String getRetInfo()
-    {
-        return retInfo;
-    }
-
-    public void setRetInfo(String retInfo)
-    {
-        this.retInfo = retInfo;
-    }
-
-    public List<T> getDataList()
-    {
-        return dataList;
-    }
-
-    public void setDataList(List<T> dataList)
-    {
-        this.dataList = dataList;
     }
 
 }

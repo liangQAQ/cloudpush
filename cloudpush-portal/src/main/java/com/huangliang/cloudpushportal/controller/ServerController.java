@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @RestController
-public class GetServer {
+public class ServerController {
 
     @Resource
     private RedisTemplate redisTemplate;
