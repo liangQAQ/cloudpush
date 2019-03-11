@@ -14,23 +14,25 @@ spring:
   application:
     name: websocket
   rocketmq:
-        name-server: 127.0.0.1:9876
+        #name-server: 127.0.0.1:9876
+        name-server: 10.9.216.1:9876
         producer-send-msg-timeout: 3000
         producer-group-name: websocket-127-0-0-1-9003
-#management:
-#  endpoints:
-#    jmx:
-#      exposure:
-#        include: health,info
-#        exclude:
+  redis:
+      host: 10.9.216.1
+      #host: 127.0.0.1
+      port: 6379
+      timeout: 3000ms
+      jedis:
+        pool:
+          max-active: 20
+          max-idle: 8
+          min-idle: 0
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: health,info
+        exclude:
 
-redis:
-  host: 127.0.0.1
-  #host: 10.9.216.1
-  port: 6379
-  pool:
-    max-active: 8
-    max-wait: 1
-    max-idle: 8
-    min-idle: 0
-  timeout: 0
+

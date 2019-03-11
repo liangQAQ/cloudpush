@@ -1,21 +1,16 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
 import com.huangliang.cloudpushwebsocket.constants.Constants;
-import com.huangliang.cloudpushwebsocket.service.HttpResponseHandler;
-import com.huangliang.cloudpushwebsocket.util.JsonUtil;
+import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @ChannelHandler.Sharable
 @Component
@@ -28,7 +23,7 @@ public class WebsocketRequestHandler extends SimpleChannelInboundHandler<WebSock
 	@Autowired
 	private HttpRequestHandler httpRequestHandler;
 	@Autowired
-	private HttpResponseHandler httpResponseHandler;
+	private HttpResponseService httpResponseService;
 
 	private WebSocketServerHandshaker handshaker;
 

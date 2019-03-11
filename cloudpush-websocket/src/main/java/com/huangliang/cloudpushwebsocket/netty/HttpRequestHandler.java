@@ -1,13 +1,14 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
 import com.huangliang.api.constants.RedisPrefix;
+import com.huangliang.api.entity.Client;
 import com.huangliang.api.util.ObjUtils;
 import com.huangliang.cloudpushwebsocket.constants.CommonConsts;
 import com.huangliang.cloudpushwebsocket.constants.Constants;
 import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
-import com.huangliang.api.entity.Client;
 import com.huangliang.cloudpushwebsocket.entity.response.Message;
-import com.huangliang.cloudpushwebsocket.service.HttpResponseHandler;
+import com.huangliang.cloudpushwebsocket.service.ClientsService;
+import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
 import com.huangliang.cloudpushwebsocket.util.NettyUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
@@ -34,16 +35,11 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
 	public static Map<String,Channel> channels = new ConcurrentHashMap(1000);
 
-	@Value("${eureka.instance.instance-id}")
-	public String instanceId;
-
-    @Autowired
-	private RedisTemplate redisTemplate;
+	@Autowired
+	private HttpResponseService httpResponseService;
 
 	@Autowired
-	private HttpRequestHandler httpRequestHandler;
-	@Autowired
-	private HttpResponseHandler httpResponseHandler;
+	private ClientsService clientsService;
 
 	private WebSocketServerHandshaker handshaker;
 
@@ -57,15 +53,15 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 
 	}
 
-//	@Override
-//	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-//		ctx.flush();
-//	}
-//
-//	@Override
-//	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-//		cause.printStackTrace();
-//	}
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		ctx.flush();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		cause.printStackTrace();
+	}
 
 	/**
 	 * 处理握手请求
@@ -75,18 +71,13 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 	private void shakeHandsHandler(ChannelHandlerContext ctx, FullHttpRequest req){
 		//解析握手请求
 		String channelId = "";
-		Channel channel = null;
+		Channel channel = ctx.channel();
 		Map<String,String> requestParam = NettyUtil.getRequestParams(req);
 		if(requestParam.containsKey(Constants.CHANNELID))
 		{
 			channelId = requestParam.get(Constants.CHANNELID);
-			if(StringUtils.isNotEmpty(channelId)){
-				//赋值客户端连接对象
-				channel = ctx.channel();
-				channel.attr(Constants.attrChannelId).set(channelId);
-			}
 		}else{
-			httpResponseHandler.responseJson(ctx, new Message(CommonConsts.SUCCESS, ErrorConstants.ErrorChannelId));
+			httpResponseService.responseJson(ctx, new Message(CommonConsts.SUCCESS, ErrorConstants.ErrorChannelId));
 			log.error("握手失败:缺少channelId");
 			return ;
 		}
@@ -97,12 +88,8 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 			WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
 		} else {
 			handshaker.handshake(ctx.channel(), req);
-			channels.put(channelId,channel);
-			log.info(channels.get(channelId).attr(Constants.attrChannelId).get());
-			//缓存客户端信息
-            redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceId)));
-            //缓存服务端与客户端关联信息
-			redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
+			//将客户端放入集合
+			clientsService.put(channelId,channel);
 			//以websocket的形式将标识返回
 			ctx.channel().writeAndFlush(new TextWebSocketFrame(channelId));
 		}
