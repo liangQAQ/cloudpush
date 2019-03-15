@@ -2,8 +2,8 @@ package com.huangliang.cloudpushportal.controller;
 
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.RedisPrefix;
-import com.huangliang.cloudpushportal.entity.WebsocketServer;
-import com.huangliang.cloudpushportal.entity.response.Data;
+import com.huangliang.api.entity.response.Data;
+import com.huangliang.cloudpushportal.entity.res.WebsocketServer;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
@@ -22,22 +22,17 @@ public class ServerController {
 
     /**
      * 获取websocket的服务地址(ip+port)
-     * @param clientId
+     * @param channelId
      * @return
      */
     @RequestMapping("/server/get")
-    public Data getServer(@NotNull String clientId){
+    public Data getServer(@NotNull String channelId){
         String websocketServer = null;
-        if(StringUtils.isNotEmpty(clientId)){
-            //查询客户端之前所连接的实例
-            Map<String,String> client = redisTemplate.opsForHash().entries(RedisPrefix.PREFIX_CLIENT+clientId);
-            if(client!=null){
-                //如果是已连接过的用户，优先分配之前的websocket服务地址
-                websocketServer = client.get("server");
-            }
-        }else{
-            //不传唯一标识就返回错误信息
-            return new Data<WebsocketServer>(CommonConsts.ERROR,"缺失clientId标识");
+        //查询客户端之前所连接的实例
+        Map<String,String> client = redisTemplate.opsForHash().entries(RedisPrefix.PREFIX_CLIENT+channelId);
+        if(client!=null){
+            //如果是已连接过的用户，优先分配之前的websocket服务地址
+            websocketServer = client.get("server");
         }
         //查询所有可连接的实例
         Map<String,String> servers = (Map<String, String>) redisTemplate.opsForHash().entries(RedisPrefix.WEBSOCKETSERVER);

@@ -1,4 +1,4 @@
-package com.huangliang.cloudpushportal.entity;
+package com.huangliang.cloudpushportal.entity.res;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
