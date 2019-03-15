@@ -1,8 +1,9 @@
-package com.huangliang.cloudpushwebsocket.entity.response;
+package com.huangliang.api.entity.response;
 
 
 
-import com.huangliang.cloudpushwebsocket.constants.CommonConsts;
+
+import com.huangliang.api.constants.CommonConsts;
 
 import java.io.Serializable;
 import java.util.List;

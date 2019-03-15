@@ -1,7 +1,7 @@
-package com.huangliang.cloudpushwebsocket.entity.response;
+package com.huangliang.api.entity.response;
 
 
-import com.huangliang.cloudpushwebsocket.constants.CommonConsts;
+import com.huangliang.api.constants.CommonConsts;
 
 public class Data<T>
 {

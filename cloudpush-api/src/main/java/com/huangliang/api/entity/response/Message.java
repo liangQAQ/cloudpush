@@ -1,12 +1,8 @@
-package com.huangliang.cloudpushwebsocket.entity.response;
+package com.huangliang.api.entity.response;
 
+import com.huangliang.api.constants.CommonConsts;
+import lombok.Data;
 
-
-import com.huangliang.cloudpushwebsocket.constants.CommonConsts;
-
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "Message")
 public class Message
 {
     /**
@@ -44,36 +40,6 @@ public class Message
         {
             success = false;
         }
-    }
-    
-    public String getRet()
-    {
-        return ret;
-    }
-
-    public void setRet(String ret)
-    {
-        this.ret = ret;
-    }
-
-    public String getRetInfo()
-    {
-        return retInfo;
-    }
-
-    public void setRetInfo(String retInfo)
-    {
-        this.retInfo = retInfo;
-    }
-
-    public boolean isSuccess()
-    {
-        return success;
-    }
-
-    public void setSuccess(boolean success)
-    {
-        this.success = success;
     }
 
 }
