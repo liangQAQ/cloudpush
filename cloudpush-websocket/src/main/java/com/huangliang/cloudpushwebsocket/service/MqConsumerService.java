@@ -1,5 +1,6 @@
 package com.huangliang.cloudpushwebsocket.service;
 
+import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.cloudpushwebsocket.netty.HttpRequestHandler;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
@@ -9,10 +10,12 @@ import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,12 +31,19 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
     @Value("${eureka.instance.instance-id}")
     private String instanceId;
 
+    @Autowired
+    private ClientsService clientsService;
+
+    private static  String topicName;
+
+    private static String groupName;
+
     @Override
     public boolean consumeMsg(RocketMqContent content, MessageExt msg) {
         try {
             log.info("=====消费消息:"+new String(msg.getBody()));
             //msg中tag存的是客户端对应的标识
-            Channel channel = HttpRequestHandler.channels.get(msg.getTags());
+            Channel channel = clientsService.get(msg.getTags());
             if(channel == null){
                 log.info("不存在的客户端");
                 return false;
@@ -57,7 +67,7 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
     @Override
     public Map<String, Set<String>> subscribeTopicTags() {
         Map<String, Set<String>> map = new HashMap<>();
-        map.put(Constants.ROCKETMQ_TOPIC_PREFIX+getMqInstance(), null);
+        map.put(RocketMQConfig.getWebsocketTopic(instanceId), null);
         return map;
     }
 
@@ -67,12 +77,7 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
      */
     @Override
     public String getConsumerGroup() {
-        return getMqInstance();
-    }
-
-    //mq群组中不允许出现实例中的":"，故替换成"-"
-    private String getMqInstance(){
-        return instanceId.replace(":","-").replace(".","-");
+        return RocketMQConfig.getWebsocketGroup(instanceId);
     }
 
 }

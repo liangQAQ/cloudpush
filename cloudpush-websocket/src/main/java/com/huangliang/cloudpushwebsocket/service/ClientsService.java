@@ -67,7 +67,7 @@ public class ClientsService {
             return  channels.put(channelId,channel);
         }catch (Exception e){
             log.error("加入客户端失败.",e);
-            return null;
         }
+        return null;
     }
 }

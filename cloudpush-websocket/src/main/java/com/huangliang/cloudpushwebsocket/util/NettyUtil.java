@@ -1,6 +1,6 @@
 package com.huangliang.cloudpushwebsocket.util;
 
-import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.api.constants.Constants;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import io.netty.handler.codec.http.multipart.DefaultHttpDataFactory;
