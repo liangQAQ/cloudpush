@@ -9,6 +9,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -35,7 +36,7 @@ public class MessageService {
             //根据id找到对应的客户端对象所对应的实例名
             client = new HashMap();
             client = redisTemplate.opsForHash().entries(RedisPrefix.PREFIX_CLIENT+channelId);
-            if(client==null){
+            if(CollectionUtils.isEmpty(client)){
                 log.info("不存在的客户端[{}]",channelId);
                 continue;
             }
