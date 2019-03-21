@@ -4,7 +4,7 @@ import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
 import com.huangliang.api.entity.response.Message;
-import com.huangliang.cloudpushwebsocket.service.ClientsService;
+import com.huangliang.cloudpushwebsocket.service.ChannelService;
 import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
 import com.huangliang.cloudpushwebsocket.util.NettyUtil;
 import io.netty.channel.Channel;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @ChannelHandler.Sharable
 @Component
@@ -32,7 +31,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 	private HttpResponseService httpResponseService;
 
 	@Autowired
-	private ClientsService clientsService;
+	private ChannelService clientsService;
 
 	private WebSocketServerHandshaker handshaker;
 

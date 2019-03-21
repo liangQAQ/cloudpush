@@ -2,7 +2,7 @@ package com.huangliang.cloudpushwebsocket.service;
 
 import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
-import com.huangliang.cloudpushwebsocket.netty.HttpRequestHandler;
+import com.huangliang.cloudpushwebsocket.entity.WebsocketMessage;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqContent;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqTopic;
@@ -12,11 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,11 +29,7 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
     private String instanceId;
 
     @Autowired
-    private ClientsService clientsService;
-
-    private static  String topicName;
-
-    private static String groupName;
+    private ChannelService clientsService;
 
     @Override
     public boolean consumeMsg(RocketMqContent content, MessageExt msg) {
@@ -52,13 +45,22 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
                 log.info("客户端通道已关闭，消息丢弃");
                 return false;
             }
-            channel.writeAndFlush(new TextWebSocketFrame(new String(msg.getBody())));
+//            channel.writeAndFlush(new TextWebSocketFrame(new String(msg.getBody())));
+            channel.writeAndFlush(getMessage(msg));
             return true;
         }catch (Exception e){
             log.error("消费消息失败.",e);
         }
         return false;
     }
+
+    //构造推送消息体
+    private TextWebSocketFrame getMessage(MessageExt msg) {
+        WebsocketMessage websocketMsg = new WebsocketMessage(msg.getMsgId(),Constants.MessageType.SEND.getValue(),msg.getTags(),Constants.SYSTEM,Constants.MessageTrigger.HTTP.getValue());
+
+        return null;
+    }
+
 
     /**
      * 订阅该服务实例名的topic

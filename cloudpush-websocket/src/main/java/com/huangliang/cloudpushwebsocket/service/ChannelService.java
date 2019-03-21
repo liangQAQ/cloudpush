@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Service
-public class ClientsService {
+public class ChannelService {
 
     @Value("${eureka.instance.instance-id}")
     public String instanceId;
@@ -44,8 +44,8 @@ public class ClientsService {
      * 获取所有对象
      * @return
      */
-    public Set<Channel> getAll(){
-        return (Set)channels.values();
+    public Map<String,Channel> getAll(){
+        return channels;
     }
 
     /**
