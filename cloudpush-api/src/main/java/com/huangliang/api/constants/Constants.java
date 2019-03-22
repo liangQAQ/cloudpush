@@ -1,6 +1,7 @@
 package com.huangliang.api.constants;
 
 public interface Constants {
+
     String WEBSOCKET_SERVER = "websocket";
 
     String ROCKETMQ_TOPIC_PREFIX = "websocket";
@@ -43,9 +44,10 @@ public interface Constants {
     }
 
     enum MessageTrigger {
-        //客户端收到消息回执类型
+        //触发推送的方式
+        //1.接口请求的方式
         HTTP("HTTP"),
-        //心跳类型
+        //2.websocket消息触发
         WEBSOCKET("WEBSOCKET");
 
         String value;
