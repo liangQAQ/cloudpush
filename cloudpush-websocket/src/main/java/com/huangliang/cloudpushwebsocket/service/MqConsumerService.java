@@ -1,5 +1,6 @@
 package com.huangliang.cloudpushwebsocket.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.cloudpushwebsocket.entity.WebsocketMessage;
@@ -42,23 +43,22 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
                 return false;
             }
             if(!channel.isOpen()) {
-                log.info("客户端通道已关闭，消息丢弃");
+                log.info("[{}]客户端[{}]不可达，消息丢弃",channel.attr(com.huangliang.cloudpushwebsocket.constants.Constants.attrChannelId).get());
                 return false;
             }
 //            channel.writeAndFlush(new TextWebSocketFrame(new String(msg.getBody())));
             channel.writeAndFlush(getMessage(msg));
             return true;
         }catch (Exception e){
-            log.error("消费消息失败.",e);
+            log.error("推送失败.",e);
         }
         return false;
     }
 
     //构造推送消息体
     private TextWebSocketFrame getMessage(MessageExt msg) {
-        WebsocketMessage websocketMsg = new WebsocketMessage(msg.getMsgId(),Constants.MessageType.SEND.getValue(),msg.getTags(),Constants.SYSTEM,Constants.MessageTrigger.HTTP.getValue());
-
-        return null;
+        WebsocketMessage websocketMsg = new WebsocketMessage(msg.getMsgId(),Constants.MessageType.SEND.getValue(),msg.getTags(),new String(msg.getBody()),Constants.SYSTEM,Constants.MessageTrigger.HTTP.getValue());
+        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMsg));
     }
 
 

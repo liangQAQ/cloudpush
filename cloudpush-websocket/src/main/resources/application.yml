@@ -14,13 +14,11 @@ spring:
   application:
     name: websocket
   rocketmq:
-        #name-server: 127.0.0.1:9876
-        name-server: 10.9.216.1:9876
+        name-server: 127.0.0.1:9876
         producer-send-msg-timeout: 3000
         producer-group-name: websocket-127-0-0-1-9003
   redis:
-      host: 10.9.216.1
-      #host: 127.0.0.1
+      host: 127.0.0.1
       port: 6379
       timeout: 3000ms
       jedis:

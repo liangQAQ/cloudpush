@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,8 +61,9 @@ public class ChannelService {
             redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceId)));
             //缓存服务端与客户端关联信息
             redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
-            //给channel对象绑定channelId标识
+            //给channel对象绑定客户端channelId标识
             channel.attr(Constants.attrChannelId).set(channelId);
+            channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
             log.info("加入了客户端：[{}]",channelId);
             return  channels.put(channelId,channel);
         }catch (Exception e){
