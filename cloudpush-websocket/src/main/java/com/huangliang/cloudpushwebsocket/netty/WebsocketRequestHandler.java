@@ -28,8 +28,6 @@ public class WebsocketRequestHandler extends SimpleChannelInboundHandler<WebSock
 	@Autowired
 	private WebsocketServiceFactory websocketServiceFactory;
 
-	private WebSocketServerHandshaker handshaker;
-
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame){
 		try {
@@ -40,7 +38,7 @@ public class WebsocketRequestHandler extends SimpleChannelInboundHandler<WebSock
 			 * 判断是否文本消息
 			 * 策略模式
 			 */
-			websocketServiceFactory.execute(frame);
+			websocketServiceFactory.execute(ctx,frame);
 		} catch (Exception e) {
 		    e.printStackTrace();
 //			log.error("请求异常",e);

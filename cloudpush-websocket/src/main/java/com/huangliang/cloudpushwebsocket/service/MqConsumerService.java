@@ -46,8 +46,11 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
                 log.info("[{}]客户端[{}]不可达，消息丢弃",channel.attr(com.huangliang.cloudpushwebsocket.constants.Constants.attrChannelId).get());
                 return false;
             }
+            //发起推送
 //            channel.writeAndFlush(new TextWebSocketFrame(new String(msg.getBody())));
             channel.writeAndFlush(getMessage(msg));
+            //更新活跃时间
+            clientsService.updateActiveTime(channel);
             return true;
         }catch (Exception e){
             log.error("推送失败.",e);

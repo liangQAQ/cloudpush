@@ -1,5 +1,6 @@
 package com.huangliang.cloudpushwebsocket.service.websocket;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -34,7 +35,7 @@ public class WebsocketServiceFactory {
         return map.get(frame.getClass());
     }
 
-    public void execute(WebSocketFrame frame){
-        getInstants(frame).handler(frame);
+    public void execute(ChannelHandlerContext ctx, WebSocketFrame frame){
+        getInstants(frame).handler(ctx,frame);
     }
 }

@@ -2,6 +2,7 @@ package com.huangliang.cloudpushwebsocket.service;
 
 import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.Client;
+import com.huangliang.api.util.DateUtils;
 import com.huangliang.api.util.ObjUtils;
 import com.huangliang.cloudpushwebsocket.constants.Constants;
 import io.netty.channel.Channel;
@@ -29,7 +30,7 @@ public class ChannelService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    //初始化1000容量，减少扩容带来的消耗
+    //初始化1000容量，减少扩容
     private static Map<String,Channel> channels = new ConcurrentHashMap(1000);
 
     /**
@@ -70,5 +71,34 @@ public class ChannelService {
             log.error("加入客户端失败.",e);
         }
         return null;
+    }
+
+    /**
+     * 更新活跃时间
+     * @param channel
+     */
+    public void updateActiveTime(Channel channel){
+        //更新自己维护的
+        updateHostActiveTime(channel);
+        //更新redis维护的
+        redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.getCurrentDateTime());
+    }
+
+    /**
+     * 移除客户端
+     * @param channel
+     */
+    public void remove(Channel channel){
+        //删除自己维护的客户端列表
+        channels.remove(channel.attr(Constants.attrChannelId).get());
+        //删除redis中维护的客户端信息
+        redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get());
+        //删除redis中客户端与host的关联关系
+        redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId);
+    }
+
+    //更新当前主机所维护的客户端的活跃时间
+    private void updateHostActiveTime(Channel channel){
+        channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
     }
 }
