@@ -64,6 +64,7 @@ public class ChannelService {
             redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
             //给channel对象绑定客户端channelId标识
             channel.attr(Constants.attrChannelId).set(channelId);
+            //更新活跃时间
             channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
             log.info("加入了客户端：[{}]",channelId);
             return  channels.put(channelId,channel);
@@ -89,12 +90,13 @@ public class ChannelService {
      * @param channel
      */
     public void remove(Channel channel){
+        String channelId = channel.attr(Constants.attrChannelId).get();
         //删除自己维护的客户端列表
-        channels.remove(channel.attr(Constants.attrChannelId).get());
+        channels.remove(channelId);
         //删除redis中维护的客户端信息
         redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get());
         //删除redis中客户端与host的关联关系
-        redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId);
+        redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
     }
 
     //更新当前主机所维护的客户端的活跃时间
