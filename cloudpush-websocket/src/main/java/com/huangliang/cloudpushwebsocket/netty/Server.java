@@ -97,7 +97,6 @@ public class Server {
     private void init(){
         //设置redis中记录的websocket服务地址的连接端口
         setRedisWebsocketPort();
-        //创建该websocket服务所使用的rocketmq对应的topic
     }
 
     public void destroy() {
@@ -112,6 +111,8 @@ public class Server {
             log.info("设置实例[{}]的netty端口为[{}].",instanceId,nettyPort);
         }else{
             log.info("不存在[{}]的实例,netty初始化失败...",instanceId);
+            System.exit(0);
+//            throw new
 //            try {
 //                Thread.sleep(2000);
 //            } catch (InterruptedException e) {
