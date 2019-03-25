@@ -3,7 +3,7 @@ package com.huangliang.cloudpushwebsocket.service;
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
-import com.huangliang.cloudpushwebsocket.entity.WebsocketMessage;
+import com.huangliang.api.entity.WebsocketMessage;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqContent;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqTopic;
@@ -60,7 +60,14 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
 
     //构造推送消息体
     private TextWebSocketFrame getMessage(MessageExt msg) {
-        WebsocketMessage websocketMsg = new WebsocketMessage(msg.getMsgId(),Constants.MessageType.SEND.getValue(),msg.getTags(),new String(msg.getBody()),Constants.SYSTEM,Constants.MessageTrigger.HTTP.getValue());
+        WebsocketMessage websocketMsg = new WebsocketMessage(
+                msg.getMsgId(),
+                WebsocketMessage.Type.SEND.getCode(),
+                msg.getTags(),
+                new String(msg.getBody()),
+                Constants.SYSTEM,
+                Integer.parseInt(msg.getProperty(Constants.Trigger))
+                );
         return new TextWebSocketFrame(JSONObject.toJSONString(websocketMsg));
     }
 

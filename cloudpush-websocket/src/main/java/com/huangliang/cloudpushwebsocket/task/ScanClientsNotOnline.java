@@ -37,12 +37,12 @@ public class ScanClientsNotOnline {
             return ;
         }
         Channel channel = null;
-        for(String key : channels.keySet()){
-            channel = channels.get(key);
-            if(!channel.isOpen()&&outOfTime(channel)){
-                channelService.remove(channel);
-            }
-        }
+//        for(String key : channels.keySet()){
+//            channel = channels.get(key);
+//            if(!channel.isOpen()&&outOfTime(channel)){
+//                channelService.remove(channel);
+//            }
+//        }
         log.info("过期客户端扫描任务执行完毕");
     }
 

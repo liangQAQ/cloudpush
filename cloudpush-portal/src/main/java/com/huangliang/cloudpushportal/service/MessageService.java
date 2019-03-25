@@ -1,7 +1,9 @@
 package com.huangliang.cloudpushportal.service;
 
 import com.huangliang.api.config.RocketMQConfig;
+import com.huangliang.api.constants.Constants;
 import com.huangliang.api.constants.RedisPrefix;
+import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.cloudpushportal.entity.req.SendFrom;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.DefaultRocketMqProducer;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +48,10 @@ public class MessageService {
 
     private Message getInstants(String topic,String channelId,String msg){
         //构建message消息体
-        return new Message(topic,channelId,msg.getBytes());
+        Message message = new Message(topic,channelId,msg.getBytes());
+        //由调用接口的方式触发消息
+        message.putUserProperty(Constants.Trigger,WebsocketMessage.Trigger.HTTP.getCode()+"");
+        return message;
     }
 
 }

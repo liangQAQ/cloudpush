@@ -20,48 +20,6 @@ public interface Constants {
 
     String CHANNELID = "channelId";
 
-    enum MessageType {
-        //服务端向客户端推送类型
-        SEND("SEND"),
-        //客户端收到消息回执类型
-        ACK("ACK"),
-        //心跳类型
-        HEARTBEAT("HEARTBEAT");
+    String Trigger = "Trigger";
 
-        String value;
-
-        MessageType(String s) {
-            this.value = s;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-    }
-
-    enum MessageTrigger {
-        //触发推送的方式
-        //1.接口请求的方式
-        HTTP("HTTP"),
-        //2.websocket消息触发
-        WEBSOCKET("WEBSOCKET");
-
-        String value;
-
-        MessageTrigger(String s) {
-            this.value = s;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-    }
 }

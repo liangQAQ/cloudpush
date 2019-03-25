@@ -23,7 +23,7 @@ public class WebsocketRequestService {
         try {
             websocketServiceFactory.execute(ctx,frame);
         } catch (Exception e) {
-            log.error("发送消息异常", e);
+            log.error("处理消息异常", e);
         }
     }
 
