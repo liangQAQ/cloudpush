@@ -7,6 +7,7 @@ import com.huangliang.api.util.ObjUtils;
 import com.huangliang.cloudpushwebsocket.constants.Constants;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -75,6 +76,29 @@ public class ChannelService {
     }
 
     /**
+     * 移除客户端
+     * @param channel
+     */
+    public void remove(Channel channel){
+        String channelId = channel.attr(Constants.attrChannelId).get();
+        if(!StringUtils.isNotEmpty(channelId)){return;}
+        try {
+            //删除自己维护的客户端列表
+            channels.remove(channelId);
+            //删除redis中维护的客户端信息
+            redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get());
+            //删除redis中客户端与host的关联关系
+            redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
+            String dateTime = channel.attr(Constants.attrActiveTime).get();
+            log.info("移除了客户端[{}],上一次的活跃时间为[{}]",
+                    channelId,
+                    StringUtils.isNotEmpty(dateTime)?DateUtils.dateToDateTime(new Date(Long.parseLong(dateTime))):"");
+        }catch (Exception e){
+
+        }
+    }
+
+    /**
      * 更新活跃时间
      * @param channel
      */
@@ -83,20 +107,6 @@ public class ChannelService {
         updateHostActiveTime(channel);
         //更新redis维护的
         redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.getCurrentDateTime());
-    }
-
-    /**
-     * 移除客户端
-     * @param channel
-     */
-    public void remove(Channel channel){
-        String channelId = channel.attr(Constants.attrChannelId).get();
-        //删除自己维护的客户端列表
-        channels.remove(channelId);
-        //删除redis中维护的客户端信息
-        redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get());
-        //删除redis中客户端与host的关联关系
-        redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
     }
 
     //更新当前主机所维护的客户端的活跃时间
