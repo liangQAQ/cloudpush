@@ -23,9 +23,12 @@ public class Client implements Serializable {
 
     private String lastActiveTime;
 
+    private String createTime;
+
     public Client(String channelId, String host) {
         this.channelId = channelId;
         this.host = host;
         this.lastActiveTime = DateUtils.getCurrentDateTime();
+        this.createTime = this.lastActiveTime;
     }
 }
