@@ -62,7 +62,7 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
     private TextWebSocketFrame getMessage(MessageExt msg) {
         WebsocketMessage websocketMsg = new WebsocketMessage(
                 msg.getMsgId(),
-                WebsocketMessage.Type.SEND.getCode(),
+                WebsocketMessage.Type.SENDTOCLIENT.code,
                 msg.getTags(),
                 new String(msg.getBody()),
                 Constants.SYSTEM,

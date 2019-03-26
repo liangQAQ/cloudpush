@@ -22,7 +22,7 @@ public class WebsocketServiceFactory {
     @Autowired
     private CloseWebSocketService closeWebSocketService;
 
-    private Map<Class,IWebSocketService> map = new HashedMap();
+    private static Map<Class,IWebSocketService> map = new HashedMap();
 
     @PostConstruct
     private void init() {

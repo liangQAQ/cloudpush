@@ -77,19 +77,18 @@ public class ChannelService {
 
     /**
      * 移除客户端
-     * @param channel
+     * @param channelId
      */
-    public void remove(Channel channel){
-        String channelId = channel.attr(Constants.attrChannelId).get();
+    public void remove(String channelId){
         if(!StringUtils.isNotEmpty(channelId)){return;}
         try {
+            String dateTime = channels.get(channelId).attr(Constants.attrActiveTime).get();
             //删除自己维护的客户端列表
             channels.remove(channelId);
             //删除redis中维护的客户端信息
-            redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get());
+            redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channelId);
             //删除redis中客户端与host的关联关系
             redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
-            String dateTime = channel.attr(Constants.attrActiveTime).get();
             log.info("移除了客户端[{}],上一次的活跃时间为[{}]",
                     channelId,
                     StringUtils.isNotEmpty(dateTime)?DateUtils.dateToDateTime(new Date(Long.parseLong(dateTime))):"");
@@ -103,14 +102,9 @@ public class ChannelService {
      * @param channel
      */
     public void updateActiveTime(Channel channel){
-        //更新自己维护的
-        updateHostActiveTime(channel);
-        //更新redis维护的
-        redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.getCurrentDateTime());
-    }
-
-    //更新当前主机所维护的客户端的活跃时间
-    private void updateHostActiveTime(Channel channel){
+        //更新自己维护的信息
         channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
+        //更新redis维护的信息
+        redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.getCurrentDateTime());
     }
 }

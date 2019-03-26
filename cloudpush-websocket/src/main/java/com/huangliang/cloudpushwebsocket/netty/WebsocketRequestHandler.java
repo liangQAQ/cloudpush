@@ -32,29 +32,54 @@ public class WebsocketRequestHandler extends SimpleChannelInboundHandler<WebSock
 	protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame){
 		try {
 			/**
+			 *  策略模式
 			 * 判断是否关闭链路的指令
 			 * 判断是否ping消息
 			 * 判断是否二进制消息
 			 * 判断是否文本消息
-			 * 策略模式
 			 */
 			websocketServiceFactory.execute(ctx,frame);
 		} catch (Exception e) {
-		    e.printStackTrace();
-//			log.error("请求异常",e);
+//		    e.printStackTrace();
+			log.error("请求异常",e);
 //			httpResponseHandler.responseFailed(ctx);
 		}
 
 	}
 
-//	@Override
-//	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-//		ctx.flush();
-//	}
-//
-//	@Override
-//	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-//		cause.printStackTrace();
-//	}
+	@Override
+	public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+		log.info("channelRegistered");
+		super.channelRegistered(ctx);
+	}
+
+	@Override
+	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+		log.info("channelUnregistered");
+		super.channelUnregistered(ctx);
+	}
+
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		log.info("channelActive");
+		super.channelActive(ctx);
+	}
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		log.info("channelInactive");
+		super.channelInactive(ctx);
+	}
+
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		log.info("channelReadComplete");
+		ctx.flush();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		cause.printStackTrace();
+	}
 
 }
