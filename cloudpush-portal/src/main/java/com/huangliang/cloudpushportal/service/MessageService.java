@@ -50,7 +50,7 @@ public class MessageService {
         //构建message消息体
         Message message = new Message(topic,channelId,msg.getBytes());
         //由调用接口的方式触发消息
-        message.putUserProperty(Constants.Trigger,WebsocketMessage.Trigger.HTTP.getCode()+"");
+        message.putUserProperty(Constants.Trigger,WebsocketMessage.Trigger.HTTP.code+"");
         return message;
     }
 
