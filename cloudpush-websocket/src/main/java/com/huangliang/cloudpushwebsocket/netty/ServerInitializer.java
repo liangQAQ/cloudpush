@@ -25,8 +25,9 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpObjectAggregator(65536));
         pipeline.addLast(new ChunkedWriteHandler());
-		// 自己的逻辑Handler
+		// http处理握手
 		pipeline.addLast(httpRequestHandler);
+		//websocket处理websocket消息
 		pipeline.addLast(websocketRequestHandler);
 	}
 }
