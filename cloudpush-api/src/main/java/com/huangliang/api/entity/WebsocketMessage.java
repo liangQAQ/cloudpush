@@ -62,6 +62,14 @@ public class WebsocketMessage implements Serializable {
         public String info;
 
         Type(Integer code, String info){
+            this.code = code;
+            this.info = info;
+        }
+        public Integer getCode() {
+            return code;
+        }
+        public String getInfo() {
+            return info;
         }
     }
 
@@ -76,6 +84,16 @@ public class WebsocketMessage implements Serializable {
         public String info;
 
         Trigger(Integer code, String info) {
+            this.code = code;
+            this.info = info;
+        }
+
+
+        public Integer getCode() {
+            return code;
+        }
+        public String getInfo() {
+            return info;
         }
     }
 }
