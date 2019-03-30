@@ -1,6 +1,5 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
-import com.huangliang.cloudpushwebsocket.constants.Constants;
 import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
 import com.huangliang.cloudpushwebsocket.service.websocket.WebsocketServiceFactory;
 import io.netty.channel.ChannelHandler;

@@ -28,12 +28,12 @@ public class ScanClientsNotOnline {
 
     private static Long now = null;
 
-    @Scheduled(fixedRate=60000,fixedDelay = 60000)
+    @Scheduled(fixedRate=60000)
     private void execute() {
         log.info("过期客户端扫描任务开启...");
         now = System.currentTimeMillis();
         Map<String,Channel> channels = channelService.getAll();
-        if(!CollectionUtils.isEmpty(channels)){
+        if(CollectionUtils.isEmpty(channels)){
             log.info("没有客户端连接.");
             return ;
         }
@@ -41,6 +41,7 @@ public class ScanClientsNotOnline {
         //存储需要删除的客户端
         List<String> delKeys = new ArrayList<>();
         for(String key : channels.keySet()){
+            channel = channelService.get(key);
             if(!channel.isOpen()&&outOfTime(channel)){
                 delKeys.add(key);
             }

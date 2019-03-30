@@ -66,7 +66,7 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
                 msg.getTags(),
                 new String(msg.getBody()),
                 Constants.SYSTEM,
-                Integer.parseInt(msg.getProperty(Constants.Trigger))
+                Integer.parseInt(msg.getUserProperty(Constants.Trigger))
                 );
         return new TextWebSocketFrame(JSONObject.toJSONString(websocketMsg));
     }

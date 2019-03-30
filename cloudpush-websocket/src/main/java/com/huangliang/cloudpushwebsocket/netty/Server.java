@@ -1,7 +1,6 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
 import com.huangliang.api.constants.RedisPrefix;
-import com.huangliang.cloudpushwebsocket.constants.Constants;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -18,8 +17,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @Component
 @Slf4j
