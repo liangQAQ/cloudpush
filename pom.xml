@@ -15,6 +15,7 @@
         <module>cloudpush-eureka</module>
         <module>cloudpush-portal</module>
         <module>cloudpush-websocket</module>
+        <module>cloudpush-gateway</module>
     </modules>
 
     <properties>

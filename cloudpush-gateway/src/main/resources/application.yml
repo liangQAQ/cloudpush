@@ -1,0 +1,46 @@
+server:
+  port: 8003
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lowerCaseServiceId: true  #实例名自动小写
+      routes:
+        - id: portal  #id千万不能省略
+          uri: lb://portal
+          predicates:
+          - Path=/portal/**
+          filters:
+          - StripPrefix=1
+#        - id: web1
+#          uri: https://www.baidu.com/
+#          predicates:
+#          - Path=/web/**
+#          filters:
+#          - StripPrefix=1
+  redis:
+      #host: 127.0.0.1
+      host: 192.168.99.100
+      port: 6379
+      timeout: 1000ms
+      jedis:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/
+#开启actuator管理api，后面要关闭
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
