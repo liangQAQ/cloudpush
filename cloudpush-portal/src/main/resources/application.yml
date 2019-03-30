@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: portal
+  rocketmq:
+          name-server: 10.9.216.1:9876
+          producer-send-msg-timeout: 3000
+          producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
   redis:
       #host: 127.0.0.1
       host: 192.168.99.100
@@ -16,6 +20,7 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
+    instance-id: ${spring.application.name}:${server.port}
   client:
     service-url:
       defaultZone: http://localhost:8000/eureka/
