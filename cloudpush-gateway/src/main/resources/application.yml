@@ -7,15 +7,16 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: false
+          enabled: true  #设为true便开启通过服务中心的自动根据 serviceId 创建路由的功能
           lowerCaseServiceId: true  #实例名自动小写
       routes:
+      #------------------------------------------------------------------------
         - id: portal  #id千万不能省略
           uri: lb://portal
           predicates:
           - Path=/portal/**
           filters:
-          - StripPrefix=1
+          - StripPrefix=1 #表示从二级url路径转发 请求/portal/xxxx被转化为${uri}+/xxx
 #        - id: web1
 #          uri: https://www.baidu.com/
 #          predicates:
