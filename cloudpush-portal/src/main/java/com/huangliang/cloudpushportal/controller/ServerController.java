@@ -4,10 +4,12 @@ import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.response.Data;
 import com.huangliang.cloudpushportal.entity.res.WebsocketServer;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -25,7 +27,7 @@ public class ServerController {
      * @param channelId
      * @return
      */
-    @RequestMapping("/server/get")
+    @RequestMapping(value = "/server/get",method = RequestMethod.GET)
     public Data getServer(@NotNull String channelId){
         String websocketServer = null;
         //查询客户端之前所连接的实例
