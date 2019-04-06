@@ -4,6 +4,7 @@ import com.huangliang.api.constants.Constants;
 import com.huangliang.api.constants.RedisPrefix;
 import com.netflix.appinfo.InstanceInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.netflix.eureka.server.event.*;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,7 +45,9 @@ public class EurekaStateChangeListener {
         InstanceInfo instanceInfo = event.getInstanceInfo();
         log.info("服务注册事件:"+instanceInfo.getAppName().toLowerCase()+"-"+instanceInfo.getIPAddr()+":"+instanceInfo.getPort());
         if(Constants.WEBSOCKET_SERVER.equalsIgnoreCase(instanceInfo.getAppName())){
-            redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId(),"");
+            if(StringUtils.isEmpty(redisTemplate.opsForHash().get(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId())+"")){
+                redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId(),"");
+            }
         }
     }
 
