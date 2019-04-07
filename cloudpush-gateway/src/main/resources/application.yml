@@ -17,10 +17,24 @@ spring:
           - Path=/portal/**
           filters:
           - StripPrefix=1 #表示从二级url路径转发 请求/portal/xxxx被转化为${uri}+/xxx
-#        - id: web1
+#        - id: ws  #id千万不能省略
+#          uri: ws://127.0.0.1:9000/
+#          predicates:
+#          - Path=/ws/**
+#          filters:
+#          - StripPrefix=1 #表示从二级url路径转发 请求/portal/xxxx被转化为${uri}+/xxx
+#        - id: web1_v1
 #          uri: https://www.baidu.com/
 #          predicates:
 #          - Path=/web/**
+#          - Weight= web1,1
+#          filters:
+#          - StripPrefix=1
+#        - id: web1_v2
+#          uri: https://www.163.com/
+#          predicates:
+#          - Path=/web/**
+#          - Weight= web1,1
 #          filters:
 #          - StripPrefix=1
   redis:
@@ -33,6 +47,10 @@ spring:
           max-active: 8
           max-idle: 8
           min-idle: 0
+  profiles:
+    active: dev
+    #引入config.yml
+    include: config
 eureka:
   instance:
     prefer-ip-address: true

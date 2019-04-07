@@ -1,6 +1,8 @@
 package com.huangliang.cloudpushgateway.config;
 
+import com.huangliang.cloudpushgateway.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionRepository;
@@ -16,29 +18,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 自定义路由
+ * 自定义路由,从redis中获取动态的netty提供的websocket端口
  */
 @Component
 @Slf4j
 public class RedisRouteDefinitionRepository implements RouteDefinitionRepository {
+
+    @Autowired
+    private RouteService routeService;
+
     @Override
     public Flux<RouteDefinition> getRouteDefinitions() {
-        List<RouteDefinition> routeDefinitions = new ArrayList<>();
-        RouteDefinition r = new RouteDefinition();
-        try {
-            r.setUri(new URI("ws://10.9.212.112:9000"));
-        } catch (URISyntaxException e) {
-            log.error("路径异常",e);
-        }
-        List<PredicateDefinition> predicateDefinitions = new ArrayList<>();
-        PredicateDefinition p = new PredicateDefinition();
-        p.setName("Path");
-        Map<String, String> stringStringMap = new HashMap<>();
-        stringStringMap.put("pattern","/websockett/**");
-        p.setArgs(stringStringMap);
-        predicateDefinitions.add(p);
-        r.setPredicates(predicateDefinitions);
-        routeDefinitions.add(r);
+        List<RouteDefinition> routeDefinitions = routeService.getRoutes();
         return Flux.fromIterable(routeDefinitions);
     }
 

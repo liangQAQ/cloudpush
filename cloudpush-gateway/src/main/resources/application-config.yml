@@ -1,0 +1,5 @@
+config:
+  route:
+    websocket:
+      path: /ws/**
+      group: wsgroup
