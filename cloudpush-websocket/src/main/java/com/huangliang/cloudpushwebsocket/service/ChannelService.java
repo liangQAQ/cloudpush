@@ -107,4 +107,13 @@ public class ChannelService {
         //更新redis维护的信息
         redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.getCurrentDateTime());
     }
+
+    /**
+     * 设置key的过期时间
+     * @param key
+     * @param seconds
+     */
+    private void setExpireTime(String key,Integer seconds){
+
+    }
 }

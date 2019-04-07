@@ -43,7 +43,7 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
                 return false;
             }
             if(!channel.isOpen()) {
-                log.info("[{}]客户端[{}]不可达，消息丢弃",channel.attr(com.huangliang.cloudpushwebsocket.constants.Constants.attrChannelId).get());
+                log.info("[{}]客户端不可达，消息丢弃",channel.attr(com.huangliang.cloudpushwebsocket.constants.Constants.attrChannelId).get());
                 return false;
             }
             //发起推送
