@@ -1,5 +1,7 @@
 # cloudpush
 一个基于springcloud，netty，redis，rocketmq的websocket推送服务
+### cloudpush-api
+    公共代码，被其他模块所引用
 ### cloudpush-eureka
     springcloud-eureka注册中心，方便平滑的上下线服务，水平拓展
 ### cloudpush-websocket
