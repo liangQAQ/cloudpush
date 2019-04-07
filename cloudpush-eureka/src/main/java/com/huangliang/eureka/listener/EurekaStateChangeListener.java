@@ -45,7 +45,7 @@ public class EurekaStateChangeListener {
         InstanceInfo instanceInfo = event.getInstanceInfo();
         log.info("服务注册事件:"+instanceInfo.getAppName().toLowerCase()+"-"+instanceInfo.getIPAddr()+":"+instanceInfo.getPort());
         if(Constants.WEBSOCKET_SERVER.equalsIgnoreCase(instanceInfo.getAppName())){
-            if(StringUtils.isEmpty(redisTemplate.opsForHash().get(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId())+"")){
+            if(!redisTemplate.opsForHash().hasKey(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId())){
                 redisTemplate.opsForHash().put(RedisPrefix.WEBSOCKETSERVER,instanceInfo.getInstanceId(),"");
             }
         }
