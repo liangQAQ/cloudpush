@@ -51,7 +51,10 @@ public interface CommonConsts
     
     // 分号分隔符
     String SEMICOLON_FLAG = ";";
-    
+
+    // 分号分隔符
+    String COLON_FLAG = ":";
+
     // &分隔符
     String AND_SPLIT = "&";
     
@@ -72,5 +75,7 @@ public interface CommonConsts
     Integer NINE_RANDOM = 999999999;
     
     String STRING_HTTP = "http://";
-    
+
+    String STRING_WS = "ws://";
+
 }

@@ -1,7 +1,6 @@
 package com.huangliang.api.entity.response;
 
 import com.huangliang.api.constants.CommonConsts;
-import lombok.Data;
 
 public class Message
 {
