@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 维护客户端集合的操作类
@@ -61,8 +62,10 @@ public class ChannelService {
         try {
             //缓存客户端信息
             redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceId)));
+            redisTemplate.expire(RedisPrefix.PREFIX_CLIENT+channelId,120,TimeUnit.SECONDS);
             //缓存服务端与客户端关联信息
             redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
+            redisTemplate.expire(RedisPrefix.PREFIX_SERVERCLIENTS+channelId,120,TimeUnit.SECONDS);
             //给channel对象绑定客户端channelId标识
             channel.attr(Constants.attrChannelId).set(channelId);
             //更新活跃时间
