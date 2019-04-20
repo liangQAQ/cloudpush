@@ -4,6 +4,7 @@ import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.Client;
 import com.huangliang.api.util.DateUtils;
 import com.huangliang.api.util.ObjUtils;
+import com.huangliang.cloudpushwebsocket.config.ComConfig;
 import com.huangliang.cloudpushwebsocket.constants.Constants;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class ChannelService {
 
-    @Value("${eureka.instance.instance-id}")
-    public String instanceId;
-
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private ComConfig config;
 
     //初始化1000容量，减少扩容
     private static Map<String,Channel> channels = new ConcurrentHashMap(1000);
@@ -61,11 +61,11 @@ public class ChannelService {
     public Channel put(String channelId,Channel channel){
         try {
             //缓存客户端信息
-            redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,instanceId)));
-            redisTemplate.expire(RedisPrefix.PREFIX_CLIENT+channelId,120,TimeUnit.SECONDS);
+            redisTemplate.opsForHash().putAll(RedisPrefix.PREFIX_CLIENT+channelId, ObjUtils.ObjToMap(new Client(channelId,config.getInstanceId())));
+            redisTemplate.expire(RedisPrefix.PREFIX_CLIENT+channelId,config.getExpireTime(),TimeUnit.SECONDS);
             //缓存服务端与客户端关联信息
-            redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
-            redisTemplate.expire(RedisPrefix.PREFIX_SERVERCLIENTS+channelId,120,TimeUnit.SECONDS);
+            redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+config.getInstanceId(),channelId);
+            redisTemplate.expire(RedisPrefix.PREFIX_SERVERCLIENTS+config.getInstanceId(),config.getExpireTime(),TimeUnit.SECONDS);
             //给channel对象绑定客户端channelId标识
             channel.attr(Constants.attrChannelId).set(channelId);
             //更新活跃时间
@@ -91,7 +91,7 @@ public class ChannelService {
             //删除redis中维护的客户端信息
             redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channelId);
             //删除redis中客户端与host的关联关系
-            redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+instanceId,channelId);
+            redisTemplate.opsForSet().remove(RedisPrefix.PREFIX_SERVERCLIENTS+config.getInstanceId(),channelId);
             log.info("移除了客户端[{}],上一次的活跃时间为[{}]",
                     channelId,
                     StringUtils.isNotEmpty(dateTime)?DateUtils.dateToDateTime(new Date(Long.parseLong(dateTime))):"");
