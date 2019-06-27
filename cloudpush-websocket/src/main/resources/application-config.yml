@@ -1,6 +1,6 @@
 config:
-  #客户端在redis中的有效时间
   client:
+    #客户端在redis中的有效时间
     expire-time: 120
     #判断客户端的过期间隔时间
     interval-time: 60
