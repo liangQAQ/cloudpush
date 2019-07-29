@@ -4,13 +4,13 @@ spring:
   application:
     name: portal
   rocketmq:
-          name-server: 10.9.216.1:9876
+          name-server: 10.9.217.161:9876
           producer-send-msg-timeout: 3000
           producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
   redis:
-      #host: 127.0.0.1
-      host: 192.168.99.100
-      port: 6379
+      host: 10.9.216.2
+      #host: 192.168.99.100
+      port: 6399
       timeout: 1000ms
       jedis:
         pool:
