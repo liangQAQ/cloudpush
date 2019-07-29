@@ -31,4 +31,7 @@ public class SendFrom {
     @ApiModelProperty(value="延时推送(单位秒,暂未实现)" ,required=false)
     private Integer delay;
 
+    @ApiModelProperty(value="是否发送给所有人" ,required=false)
+    private Boolean sendToAll;
+
 }
