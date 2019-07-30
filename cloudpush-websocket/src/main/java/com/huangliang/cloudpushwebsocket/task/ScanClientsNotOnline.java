@@ -66,7 +66,7 @@ public class ScanClientsNotOnline {
             channelService.remove(key);
         }
         redisTemplate.expire(RedisPrefix.PREFIX_SERVERCLIENTS+config.getInstanceId(),120,TimeUnit.SECONDS);
-        log.info("过期客户端扫描任务执行完毕,耗时[{}]ms",System.currentTimeMillis()-startTime);
+        log.info("过期客户端扫描任务执行完毕,踢出[{1}]个客户端,耗时[{2}]ms",delKeys.size(),System.currentTimeMillis()-startTime);
     }
 
     private boolean outOfTime(Channel channel) {
