@@ -3,25 +3,26 @@ server:
 spring:
   application:
     name: portal
-  rocketmq:
-          name-server: 10.9.217.161:9876
-          producer-send-msg-timeout: 3000
-          producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
-  redis:
-      host: 10.9.216.2
-      #host: 192.168.99.100
-      port: 6399
-      timeout: 1000ms
-      jedis:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
+# 配置统一从配置中心nacos读取
+#  rocketmq:
+#          name-server: 10.9.217.161:9876
+#          producer-send-msg-timeout: 3000
+#          producer-group-name: ${spring.application.name}-127-0-0-1-${server.port}
+#  redis:
+#      host: 10.9.216.2
+#      #host: 192.168.99.100
+#      port: 6399
+#      timeout: 1000ms
+#      jedis:
+#        pool:
+#          max-active: 8
+#          max-idle: 8
+#          min-idle: 0
 eureka:
   instance:
     prefer-ip-address: true
     instance-id: ${spring.application.name}:${server.port}
-  client:
-    service-url:
-      defaultZone: http://localhost:8000/eureka/
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8000/eureka/
 

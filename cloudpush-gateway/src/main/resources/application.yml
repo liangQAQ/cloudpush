@@ -37,16 +37,16 @@ spring:
 #          - Weight= web1,1
 #          filters:
 #          - StripPrefix=1
-  redis:
-      #host: 127.0.0.1
-      host: 192.168.99.100
-      port: 6379
-      timeout: 1000ms
-      jedis:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 0
+#  redis:
+#      #host: 127.0.0.1
+#      host: 192.168.99.100
+#      port: 6379
+#      timeout: 1000ms
+#      jedis:
+#        pool:
+#          max-active: 8
+#          max-idle: 8
+#          min-idle: 0
   profiles:
     active: dev
     #引入config.yml
@@ -54,9 +54,9 @@ spring:
 eureka:
   instance:
     prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://localhost:8000/eureka/
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8000/eureka/
 #开启actuator管理api，后面要关闭
 management:
   endpoints:
