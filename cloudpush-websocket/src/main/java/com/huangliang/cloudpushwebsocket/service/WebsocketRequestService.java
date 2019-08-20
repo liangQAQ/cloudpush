@@ -26,23 +26,4 @@ public class WebsocketRequestService {
             log.error("处理消息异常", e);
         }
     }
-
-//	private void sendToChannel(ChannelHandlerContext ctx,ReceiveMessage msgEntity){
-//		String[] channelIds = msgEntity.getTo().split(",");
-//		SendMessage msg = msgEntity.getSendMessage();
-//		for(String channelId:channelIds){
-//			sendMessageService.send(ctx,channelId,msg);
-//		}
-//	}
-
-//	private void sendToGroup(ChannelHandlerContext ctx,ReceiveMessage msgEntity){
-//		String groupCode = msgEntity.getTo();
-//		SendMessage msg = msgEntity.getSendMessage();
-//		List<String> clients = userGroupCacheService.get(groupCode);
-//		if(clients!=null){
-//			for(String channelId:clients){
-//				sendMessageService.send(ctx,channelId,msg);
-//			}
-//		}
-//	}
 }
