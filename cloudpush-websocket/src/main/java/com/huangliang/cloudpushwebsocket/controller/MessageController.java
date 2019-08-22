@@ -2,6 +2,7 @@ package com.huangliang.cloudpushwebsocket.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.constants.CommonConsts;
+import com.huangliang.api.entity.request.SendRequest;
 import com.huangliang.api.entity.response.Data;
 import com.huangliang.cloudpushwebsocket.service.ChannelService;
 import com.huangliang.cloudpushwebsocket.service.MessageService;
@@ -20,19 +21,11 @@ import java.util.Map;
 public class MessageController {
 
     @Autowired
-    private ChannelService channelService;
-    @Autowired
     private MessageService messageService;
 
     @RequestMapping("/message/send")
-    public Data sendToAllClient(String jsonData){
-        Map<String,Channel> map = channelService.getAll();
-        Long start = System.currentTimeMillis();
-        for(Map.Entry<String, Channel> channel : map.entrySet()){
-            channel.getValue().writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(messageService.genarateWebsocketMessage(jsonData))));
-        }
-        Long end = System.currentTimeMillis();
-        log.info("耗时[{}]ms",end-start);
+    public Data sendToAllClient(SendRequest request){
+        messageService.send(request);
         return new Data(CommonConsts.SUCCESS,CommonConsts.REQUST_SUC);
     }
 }
