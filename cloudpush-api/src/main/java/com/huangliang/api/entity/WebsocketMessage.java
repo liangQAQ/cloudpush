@@ -15,6 +15,8 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @AllArgsConstructor
 public class WebsocketMessage implements Serializable {
 
+    //消息所属的请求id
+    private String requestId;
     //一次会话的id，推送和回执保持一致
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private String messageId;
