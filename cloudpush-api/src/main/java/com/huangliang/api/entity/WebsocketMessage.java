@@ -17,7 +17,7 @@ public class WebsocketMessage implements Serializable {
 
     //一次会话的id，推送和回执保持一致
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
-    private String id;
+    private String messageId;
     //消息的类型
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private Integer type;
@@ -35,8 +35,8 @@ public class WebsocketMessage implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date activeTime = new Date();
 
-    public WebsocketMessage(String id, Integer type, String to, String msg, String from, Integer trigger) {
-        this.id = id;
+    public WebsocketMessage(String messageId, Integer type, String to, String msg, String from, Integer trigger) {
+        this.messageId = messageId;
         this.type = type;
         this.to = to;
         this.msg = msg;
