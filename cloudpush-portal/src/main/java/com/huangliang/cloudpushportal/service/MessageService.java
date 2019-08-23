@@ -49,7 +49,6 @@ public class MessageService {
             for(String serverKey : set){
                 service.execute(() -> {
                     try {
-                        System.out.println(serverKey.split("_")[1]);
                         String url = "http://"+serverKey.split("_")[1]+"/message/send";
                         RestTemplate restTemplate = new RestTemplate();
                         restTemplate.postForEntity(url,request,Data.class);
@@ -85,7 +84,7 @@ public class MessageService {
                         restTemplate.postForEntity("http://"+hostItem+"/message/send",request,Data.class);
                     });
                 }
-                //通过消息队列发送的方式废弃
+                //通过消息队列逐个发送的方式废弃
                 //producer.sendMsg(getInstants(RocketMQConfig.getWebsocketTopic(client.get("host")), channelId, form.getMsg()));
             }
         }
