@@ -4,12 +4,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @ApiModel(value="推送请求对象模型")
-public class SendRequest extends AbstractRequest{
+public class SendRequest extends AbstractRequest implements Serializable {
 
     /**
      * 发送目的地(客户端)
