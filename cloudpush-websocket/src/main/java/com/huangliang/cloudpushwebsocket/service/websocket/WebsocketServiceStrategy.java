@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.Map;
 
 @Service
-public class WebsocketServiceFactory {
+public class WebsocketServiceStrategy {
 
     @Autowired
     private PingWebSocketService pingWebSocketService;
