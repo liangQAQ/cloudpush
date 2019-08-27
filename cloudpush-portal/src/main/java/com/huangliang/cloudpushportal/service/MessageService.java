@@ -7,8 +7,12 @@ import com.huangliang.api.entity.request.SendRequest;
 import com.huangliang.api.entity.response.Data;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.DefaultRocketMqProducer;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -58,18 +62,21 @@ public class MessageService {
                 });
             }
         }else{
-            Map<String, String> client = null;
             //根据参数中的客户端标识,找出所在的服务器，先对应的服务器发起推送
-            for (String channelId : request.getTo()) {
+            List<String> requestClients = request.getTo();
+            //批量查询
+            List<Object> pipeResult = redisTemplate.executePipelined(getClientHostByClientFromRedis(requestClients));
+            for (int i=0;i<requestClients.size();i++) {
                 //遍历list 依次存入推送消息
                 //根据channelId找到对应的客户端对象所对应websocket服务的实例名
-                client = new HashMap();
-                client = redisTemplate.opsForHash().entries(RedisPrefix.PREFIX_CLIENT + channelId);
-                if (CollectionUtils.isEmpty(client)) {
+                String channelId = requestClients.get(i);
+//                String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
+                Object hostObj = pipeResult.get(i);
+                if (hostObj==null) {
                     log.info("不存在的客户端[{}]", channelId);
                     continue;
                 }
-                String host = client.get("host");
+                String host = hostObj.toString();
                 if(hostClientsMap.containsKey(host)){
                     hostClientsMap.get(host).add(channelId);
                 }else{
@@ -77,16 +84,16 @@ public class MessageService {
                     clients.add(channelId);
                     hostClientsMap.put(host,clients);
                 }
-                for(String hostItem : hostClientsMap.keySet()){
-                    service.execute(() -> {
-                        RestTemplate restTemplate = new RestTemplate();
-                        request.setTo(hostClientsMap.get(hostItem));
-                        restTemplate.postForEntity("http://"+hostItem+"/message/send",request,Data.class);
-                    });
-                }
-                //通过消息队列逐个发送的方式废弃
-                //producer.sendMsg(getInstants(RocketMQConfig.getWebsocketTopic(client.get("host")), channelId, form.getMsg()));
             }
+            for(String hostItem : hostClientsMap.keySet()){
+                service.execute(() -> {
+                    RestTemplate restTemplate = new RestTemplate();
+                    request.setTo(hostClientsMap.get(hostItem));
+                    restTemplate.postForEntity("http://"+hostItem+"/message/send",request,Data.class);
+                });
+            }
+            //通过消息队列逐个发送的方式废弃
+            //producer.sendMsg(getInstants(RocketMQConfig.getWebsocketTopic(client.get("host")), channelId, form.getMsg()));
         }
     }
 
@@ -96,6 +103,19 @@ public class MessageService {
         //由调用接口的方式触发消息
         message.putUserProperty(Constants.Trigger, WebsocketMessage.Trigger.HTTP.code + "");
         return message;
+    }
+
+    private RedisCallback<?> getClientHostByClientFromRedis(List<String> requestClients){
+        return new RedisCallback<Object>() {
+            @Override
+            public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
+                redisConnection.openPipeline();
+                for (String channelId : requestClients) {
+                    redisConnection.hGet((RedisPrefix.PREFIX_CLIENT + channelId).getBytes(),"host".getBytes());
+                }
+                return null;
+            }
+        };
     }
 
 }
