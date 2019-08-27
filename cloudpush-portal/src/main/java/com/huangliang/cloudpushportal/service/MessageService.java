@@ -70,7 +70,8 @@ public class MessageService {
                 //遍历list 依次存入推送消息
                 //根据channelId找到对应的客户端对象所对应websocket服务的实例名
                 String channelId = requestClients.get(i);
-//                String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
+                //废弃单个查询的方式
+                //String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
                 Object hostObj = pipeResult.get(i);
                 if (hostObj==null) {
                     log.info("不存在的客户端[{}]", channelId);
