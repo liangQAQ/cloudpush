@@ -11,10 +11,10 @@
 ### cloudpush-gateway
     springcloud-gateway网管，统一所有的http，websocket入口。方便未来鉴权、过滤、限流。
 ### 推送流程
-    1.websocket模块收到客户端的ws握手请求以后，将客户端的推送标识，处理握手的websocket服务实例名
+    1.websocket实例收到客户端的ws握手请求以后，将客户端的推送标识，处理握手的websocket服务实例名
     （当websocket模块集群部署时，应用名都为websocket，实例名各不相同）等相关信息记录进redis。
-    2.portal模块对外暴露的接口接收请求(主要post内容是发给谁即推送标识，发什么内容),
-    根据推送标识从redis中找出对应客户端所在的websocket实例，
-    向该websocket实例订阅的rocketmq对应的topic中投递消息（不同的websocket实例对应订阅不同的topic）
-    3.订阅了该topic的websocket实例，也就是1中完成ws握手的websocket实例,从rocketmq中取出消息，对客户端发起websocket消息推送
+    2.portal模块对外暴露的接口接收请求
+    根据请求中的客户端推送标识从redis中找出对应客户端所在的websocket实例，
+    向具体客户端所在的websocket实例发送消息。
+    3.对应websocket实例接收请求对客户端发起websocket消息推送
     
