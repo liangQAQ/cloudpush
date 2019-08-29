@@ -4,7 +4,7 @@ import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
 import com.huangliang.api.entity.response.Message;
-import com.huangliang.cloudpushwebsocket.service.ChannelService;
+import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
 import com.huangliang.cloudpushwebsocket.util.NettyUtil;
 import io.netty.channel.Channel;

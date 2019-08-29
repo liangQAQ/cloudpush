@@ -1,8 +1,8 @@
-package com.huangliang.cloudpushwebsocket.service.websocket.handler;
+package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.entity.WebsocketMessage;
-import com.huangliang.cloudpushwebsocket.service.ChannelService;
+import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.springframework.beans.factory.annotation.Autowired;

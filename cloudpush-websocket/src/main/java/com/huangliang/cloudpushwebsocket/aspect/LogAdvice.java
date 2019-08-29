@@ -1,7 +1,6 @@
 package com.huangliang.cloudpushwebsocket.aspect;
 
 import com.huangliang.api.constants.CommonConsts;
-import com.huangliang.cloudpushwebsocket.constants.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 @Slf4j
 public class Server {
 
-    private static final int InitPort = 9000;
+    private static final int InitPort = 9003;
     private static String nettyPort = "";
     private static final String url = "127.0.0.1";
 
@@ -60,12 +60,6 @@ public class Server {
             init();
         } catch (Exception e) {
             log.error("Netty start error:", e);
-        } finally {
-            if (f != null && f.isSuccess()) {
-//                log.info("Netty server listening " + address.getHostName() + " on port " + address.getPort() + " and ready for connections...");
-            } else {
-                log.error("Netty server start up Error!");
-            }
         }
 
         return f;

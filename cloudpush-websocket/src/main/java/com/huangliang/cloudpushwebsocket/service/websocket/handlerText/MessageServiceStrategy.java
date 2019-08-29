@@ -1,4 +1,4 @@
-package com.huangliang.cloudpushwebsocket.service.websocket.handler;
+package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
 import com.huangliang.api.entity.WebsocketMessage;
 import io.netty.channel.Channel;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class MessageFactoryService {
+public class MessageServiceStrategy {
 
     @Autowired
     private HeartBeatService heartBeatService;

@@ -25,6 +25,23 @@ public class ObjUtils {
         }
         return map;
     }
+
+    public static Map<byte[],byte[]> ObjToByteMap(Object obj){
+        Map<byte[],byte[]> map=new HashMap<byte[],byte[]>();
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for(Field field:fields){
+            if(field.getName().equalsIgnoreCase("class")){
+                continue;
+            }
+            field.setAccessible(true);
+            try {
+                map.put(field.getName().getBytes(), field.get(obj).toString().getBytes());
+            } catch (IllegalAccessException e) {
+                log.error("属性获取异常",e);
+            }
+        }
+        return map;
+    }
     public Object mapToObj(Map<String,Object> map,Class<?> clz) throws Exception{
         Object obj = clz.newInstance();
         Field[] declaredFields = obj.getClass().getDeclaredFields();

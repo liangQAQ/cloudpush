@@ -4,7 +4,7 @@ import com.huangliang.api.annotation.LogOperate;
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.entity.request.SendRequest;
 import com.huangliang.api.entity.response.Data;
-import com.huangliang.cloudpushwebsocket.service.MessageService;
+import com.huangliang.cloudpushwebsocket.service.message.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

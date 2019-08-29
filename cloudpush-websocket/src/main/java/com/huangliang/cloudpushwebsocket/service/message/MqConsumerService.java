@@ -1,9 +1,10 @@
-package com.huangliang.cloudpushwebsocket.service;
+package com.huangliang.cloudpushwebsocket.service.message;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.api.entity.WebsocketMessage;
+import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqContent;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqTopic;

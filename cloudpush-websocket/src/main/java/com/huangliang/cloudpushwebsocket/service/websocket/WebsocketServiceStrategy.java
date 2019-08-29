@@ -1,5 +1,8 @@
 package com.huangliang.cloudpushwebsocket.service.websocket;
 
+import com.huangliang.cloudpushwebsocket.service.websocket.handlerClose.CloseWebSocketService;
+import com.huangliang.cloudpushwebsocket.service.websocket.handlerPing.PingWebSocketService;
+import com.huangliang.cloudpushwebsocket.service.websocket.handlerText.TextWebSocketService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;

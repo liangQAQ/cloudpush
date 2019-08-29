@@ -1,7 +1,7 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
 import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
-import com.huangliang.cloudpushwebsocket.service.websocket.WebsocketServiceFactory;
+import com.huangliang.cloudpushwebsocket.service.websocket.WebsocketServiceStrategy;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -25,7 +25,7 @@ public class WebsocketRequestHandler extends SimpleChannelInboundHandler<WebSock
 	@Autowired
 	private HttpResponseService httpResponseService;
 	@Autowired
-	private WebsocketServiceFactory websocketServiceFactory;
+	private WebsocketServiceStrategy websocketServiceFactory;
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame){

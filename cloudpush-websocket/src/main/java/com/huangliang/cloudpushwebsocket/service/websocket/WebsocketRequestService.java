@@ -1,4 +1,4 @@
-package com.huangliang.cloudpushwebsocket.service;
+package com.huangliang.cloudpushwebsocket.service.websocket;
 
 import com.huangliang.cloudpushwebsocket.service.websocket.WebsocketServiceStrategy;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,7 +13,6 @@ public class WebsocketRequestService {
 
     @Autowired
     private WebsocketServiceStrategy websocketServiceStrategy;
-
 
     public void handler(ChannelHandlerContext ctx, WebSocketFrame frame) {
         try {
