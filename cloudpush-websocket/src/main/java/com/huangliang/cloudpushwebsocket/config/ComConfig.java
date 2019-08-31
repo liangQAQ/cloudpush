@@ -13,4 +13,6 @@ public class ComConfig {
     private Integer intervalTime;
     @Value("${config.client.expire-time}")
     private Integer expireTime;
+    @Value("${config.client.interval-client-active-time}")
+    private Integer intervalClientActiveTime;
 }

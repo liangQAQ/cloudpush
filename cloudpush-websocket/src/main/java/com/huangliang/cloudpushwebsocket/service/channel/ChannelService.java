@@ -7,6 +7,7 @@ import com.huangliang.api.util.DateUtils;
 import com.huangliang.api.util.ObjUtils;
 import com.huangliang.cloudpushwebsocket.config.ComConfig;
 import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.task.UpdateRedisChannelActiveTimeTask;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,8 @@ public class ChannelService {
     private RedisTemplate redisTemplate;
     @Autowired
     private ComConfig config;
+    @Autowired
+    private UpdateRedisChannelActiveTimeTask updateRedisChannelActiveTimeTask;
 
     //初始化1000容量，减少扩容
     private static Map<String,Channel> channels = new ConcurrentHashMap(1000);
@@ -129,8 +132,8 @@ public class ChannelService {
         //更新自己维护的信息
         channel.attr(Constants.attrActiveTime).set(now.getTime()+"");
         //更新redis维护的信息
-        redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
-
+        //redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
+        updateRedisChannelActiveTimeTask.addChannel(channel.attr(Constants.attrChannelId).get());
     }
 
 }

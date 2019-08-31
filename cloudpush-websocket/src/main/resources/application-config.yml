@@ -1,6 +1,10 @@
 config:
   client:
-    #客户端在redis中的有效时间
+    #客户端在redis中的有效时间(s)
     expire-time: 120
-    #判断客户端的过期间隔时间
+    #判断客户端的过期间隔时间(s)
     interval-time: 60
+    #批量更新redis中客户端的活跃时间的间隔时间(s)
+    interval-client-active-time: 5
+    #redis分页提交数量(条)
+    pipeline-page-size: 1000

@@ -19,6 +19,7 @@ public class CloudpushWebsocketApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args){
+
         ChannelFuture future = socketServer.start();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> socketServer.destroy()));
         future.channel().closeFuture().syncUninterruptibly();
