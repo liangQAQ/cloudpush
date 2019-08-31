@@ -43,6 +43,9 @@ public class RouteService {
 
     private List<RouteDefinition> routes = null;
 
+    private long lastActiveTime = System.currentTimeMillis();
+
+    //当有请求时,定时刷新websocket路由表配置
     @PostConstruct
     @Scheduled(fixedRate=60000)
     public void refresh(){

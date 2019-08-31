@@ -1,4 +1,4 @@
-package com.huangliang.cloudpushgateway.config;
+package com.huangliang.cloudpushgateway.route;
 
 import com.huangliang.cloudpushgateway.service.RouteService;
 import lombok.extern.slf4j.Slf4j;
