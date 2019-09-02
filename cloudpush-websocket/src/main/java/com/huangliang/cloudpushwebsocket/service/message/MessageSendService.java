@@ -6,6 +6,7 @@ import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,19 +29,26 @@ public class MessageSendService {
     public void sendMessage(String channelId, WebsocketMessage wsMessage){
         Channel channel = channelService.get(channelId);
         //0.校验客户端合法性
-        if(channel==null){
-            log.info("找不到该设备[{}].",channelId);
-            return;
-        }
-        if(!channel.isOpen()){
-            log.info("设备不可达[{}].",channelId);
-            return;
+        if(!checkClient(channel)){
+            return ;
         }
         //1.发起对客户端的推送(websocket消息)
         channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(wsMessage)));
         //2.修改客户端的活跃时间
         channelService.updateActiveTime(channel);
-        //3.记录日志
+        //3.记录推送日志
 
+    }
+
+    private boolean checkClient(Channel channel){
+        if(channel==null){
+            log.info("找不到该设备[{}].");
+            return false;
+        }
+        if(!channel.isOpen()){
+            log.info("设备不可达[{}].");
+            return false;
+        }
+        return true;
     }
 }
