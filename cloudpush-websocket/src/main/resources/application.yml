@@ -1,7 +1,7 @@
-hostip: 10.9.217.160
+hostip: 10.9.212.111
 
 server:
-  port: 9003 #内置tomcat启动的端口号(集群需不同名)
+  port: 9000 #内置tomcat启动的端口号(集群需不同名)
 
 eureka:
   instance:

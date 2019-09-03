@@ -22,8 +22,9 @@ public class PingWebSocketService implements IWebSocketService {
     public void handler(ChannelHandlerContext ctx,WebSocketFrame frame) {
         Channel channel = ctx.channel();
         log.info("[{}]Ping来了。。。。",channel.attr(Constants.attrChannelId).get());
+        //写回pong响应
         ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
+        //更新活跃时间
         channelService.updateActiveTime(channel);
-        return ;
     }
 }

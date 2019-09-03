@@ -128,9 +128,8 @@ public class ChannelService {
      * @param channel
      */
     public void updateActiveTime(Channel channel){
-        Date now = new Date();
         //更新自己维护的信息
-        channel.attr(Constants.attrActiveTime).set(now.getTime()+"");
+        channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
         //更新redis维护的信息
         //redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
         updateRedisChannelActiveTimeTask.addChannel(channel.attr(Constants.attrChannelId).get());

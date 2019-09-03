@@ -8,8 +8,11 @@ import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.Constant;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * 消息发送类
@@ -33,11 +36,19 @@ public class MessageSendService {
             return ;
         }
         //1.发起对客户端的推送(websocket消息)
-        channel.writeAndFlush(new TextWebSocketFrame(JSONObject.toJSONString(wsMessage)));
-        //2.修改客户端的活跃时间
+        channel.writeAndFlush(generateMessage(wsMessage));
+        //2.修改本地和redis中维护的客户端的活跃时间
         channelService.updateActiveTime(channel);
         //3.记录推送日志
 
+    }
+
+    private TextWebSocketFrame generateMessage(WebsocketMessage websocketMessage){
+        //设置推送的消息id
+        if (StringUtils.isEmpty(websocketMessage.getMessageId())){
+            websocketMessage.setMessageId(UUID.randomUUID().toString());
+        }
+        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage));
     }
 
     private boolean checkClient(Channel channel){

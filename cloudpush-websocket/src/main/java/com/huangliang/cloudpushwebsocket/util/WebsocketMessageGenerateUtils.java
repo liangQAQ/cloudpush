@@ -26,7 +26,7 @@ public class WebsocketMessageGenerateUtils {
     public static WebsocketMessage generateWebsocketMessage(String channelId,String requestId,String msgId,String msgJson){
         WebsocketMessage websocketMsg = new WebsocketMessage(
                 msgId,
-                WebsocketMessage.Type.SENDTOCLIENT.code,
+                WebsocketMessage.Type.BUSSINESS.code,
                 channelId,
                 new String(msgJson),
                 Constants.SYSTEM,
