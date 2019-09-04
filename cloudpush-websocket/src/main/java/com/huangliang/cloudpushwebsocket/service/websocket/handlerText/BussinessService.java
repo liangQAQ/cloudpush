@@ -31,10 +31,12 @@ public class BussinessService implements IMessageService {
 
     @Override
     public void handler(Channel channel, WebsocketMessage websocketMessage) {
-        checkWsMessage(channel,websocketMessage);
+        if(!checkWsMessage(channel,websocketMessage)){
+            return ;
+        }
         String arr[] = websocketMessage.getTo().split(CommonConsts.COMMA_FLAG);
-        Map<String,List<String>> hostClientsMap = new HashMap<>();
         List<String> toClients = Arrays.asList(arr);
+        Map<String,List<String>> hostClientsMap = new HashMap<>();
         List<Object> pipeResult = redisTemplate.executePipelined(RedisUtils.getClientHostByClientFromRedis(toClients));
         for (int i=0;i<toClients.size();i++) {
             //遍历list 依次推送消息
@@ -65,7 +67,7 @@ public class BussinessService implements IMessageService {
     private boolean checkWsMessage(Channel channel,WebsocketMessage websocketMessage) {
         String sendTo = websocketMessage.getTo();
         if(StringUtils.isEmpty(sendTo)){
-            log.info("目标对象为空");
+            log.info("目标对象为空"+websocketMessage);
             return false;
         }
         websocketMessage.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);

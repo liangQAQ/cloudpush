@@ -1,10 +1,12 @@
 package com.huangliang.cloudpushportal.service;
 
+import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.api.entity.request.SendRequest;
 import com.huangliang.api.entity.response.Data;
+import com.huangliang.api.util.RedisUtils;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.DefaultRocketMqProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -65,7 +67,7 @@ public class MessageService {
             //根据参数中的客户端标识,找出所在的服务器，先对应的服务器发起推送
             List<String> requestClients = request.getTo();
             //批量查询
-            List<Object> pipeResult = redisTemplate.executePipelined(getClientHostByClientFromRedis(requestClients));
+            List<Object> pipeResult = redisTemplate.executePipelined(RedisUtils.getClientHostByClientFromRedis(requestClients));
             for (int i=0;i<requestClients.size();i++) {
                 //遍历list 依次存入推送消息
                 //根据channelId找到对应的客户端对象所对应websocket服务的实例名
@@ -94,7 +96,7 @@ public class MessageService {
                 });
             }
             //通过消息队列逐个发送的方式废弃
-            //producer.sendMsg(getInstants(RocketMQConfig.getWebsocketTopic(client.get("host")), channelId, form.getMsg()));
+//            producer.sendMsg(getInstants(RocketMQConfig.getWebsocketTopic(client.get("host")), channelId, form.getMsg()));
         }
     }
 
@@ -104,19 +106,6 @@ public class MessageService {
         //由调用接口的方式触发消息
         message.putUserProperty(Constants.Trigger, WebsocketMessage.Trigger.HTTP.code + "");
         return message;
-    }
-
-    private RedisCallback<?> getClientHostByClientFromRedis(List<String> requestClients){
-        return new RedisCallback<Object>() {
-            @Override
-            public Object doInRedis(RedisConnection redisConnection) throws DataAccessException {
-                redisConnection.openPipeline();
-                for (String channelId : requestClients) {
-                    redisConnection.hGet((RedisPrefix.PREFIX_CLIENT + channelId).getBytes(),"host".getBytes());
-                }
-                return null;
-            }
-        };
     }
 
 }
