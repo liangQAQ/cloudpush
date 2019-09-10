@@ -17,19 +17,21 @@ public class WebsocketMessage implements Serializable {
 
     //消息所属的请求id
     private String requestId;
-    //一次会话的id，推送和回执保持一致
+    //会话id,在同一次中保持一致
+    private String sessionId;
+    //推送消息的id，推送和回执保持一致
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private String messageId;
     //消息的类型
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private Integer type;
-    //目标客户端标识
+    //目标客户端标识(多个以,隔开)
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private String to;
-    //来源
+    //消息内容
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private String msg;
-    //消息内容
+    //来源
     @JsonIgnore
     private String from;
     //触发类型 1.接口调用触发 2.websocket通信触发
@@ -46,19 +48,16 @@ public class WebsocketMessage implements Serializable {
         this.trigger = trigger;
     }
 
+    //消息类型标识
     public enum Type {
-        //服务端向客户端发送类型
-        SENDTOCLIENT(1,"SENDTOCLIENT"),
-        //服务端向客户端发送回执类型
-        SENDTOCLIENTACK(2,"SENDTOCLIENTACK"),
-        //客户端向服务端发送类型
-        SENDTOSERVER(3,"SENDTOSERVER"),
-        //客户端向服务端发送回执类型
-        SENDTOSERVERACK(4,"SENDTOSERVERACK"),
+        //发送的业务类型消息
+        BUSSINESS(1,"bussiness"),
+        //发送的业务类型消息的回执
+        BUSSINESS_ACK(2,"bussiness_ack"),
         //心跳类型
-        HEARTBEAT(5,"HEARTBEAT"),
+        HEARTBEAT(3,"heartbeat"),
         //心跳类型回执
-        HEARTBEATACK(6,"HEARTBEATACK");
+        HEARTBEAT_ACK(4,"heartbeat_ack");
 
         public Integer code;
         public String info;
@@ -89,8 +88,6 @@ public class WebsocketMessage implements Serializable {
             this.code = code;
             this.info = info;
         }
-
-
         public Integer getCode() {
             return code;
         }
