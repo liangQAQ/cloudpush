@@ -3,6 +3,7 @@ package com.huangliang.cloudpushwebsocket.service.message;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.entity.WebsocketMessage;
+import com.huangliang.api.util.UUIDUtils;
 import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -46,7 +47,7 @@ public class MessageSendService {
     private TextWebSocketFrame generateMessage(WebsocketMessage websocketMessage){
         //设置推送的消息id
         if (StringUtils.isEmpty(websocketMessage.getMessageId())){
-            websocketMessage.setMessageId(UUID.randomUUID().toString());
+            websocketMessage.setMessageId(UUIDUtils.getUUID());
         }
         return new TextWebSocketFrame(JSONObject.toJSONString(websocketMessage));
     }

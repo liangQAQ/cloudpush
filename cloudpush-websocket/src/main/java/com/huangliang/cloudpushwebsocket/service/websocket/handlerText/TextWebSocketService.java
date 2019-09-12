@@ -2,9 +2,8 @@ package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.entity.WebsocketMessage;
-import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
 import com.huangliang.cloudpushwebsocket.service.websocket.IWebSocketService;
-import com.huangliang.cloudpushwebsocket.service.websocket.handlerText.MessageServiceStrategy;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -31,7 +30,7 @@ public class TextWebSocketService implements IWebSocketService {
             return ;
         }
         Channel channel = ctx.channel();
-        log.info("receive[{}]:" + str,channel.attr(Constants.attrChannelId).get());
+        log.info("receive[{}]:" + str,channel.attr(AttrConstants.channelId).get());
         //按规定规则解析消息
         WebsocketMessage msg = init(str);
         if(msg == null ){

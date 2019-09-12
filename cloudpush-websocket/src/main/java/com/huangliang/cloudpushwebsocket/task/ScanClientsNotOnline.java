@@ -2,7 +2,7 @@ package com.huangliang.cloudpushwebsocket.task;
 
 import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.cloudpushwebsocket.config.ComConfig;
-import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
 import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class ScanClientsNotOnline {
     }
 
     private boolean outOfTime(Channel channel) {
-        String activeTime = channel.attr(Constants.attrActiveTime).get();
+        String activeTime = channel.attr(AttrConstants.activeTime).get();
         if(System.currentTimeMillis()-Long.parseLong(activeTime)>config.getIntervalTime()){
             return true;
         }else{

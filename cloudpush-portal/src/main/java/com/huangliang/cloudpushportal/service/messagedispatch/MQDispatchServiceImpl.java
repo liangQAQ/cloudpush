@@ -29,7 +29,7 @@ public class MQDispatchServiceImpl implements MessageDispatchService {
 
     private Message getInstants(String topic, SendRequest msg) {
         //构建message消息体
-        Message message = new Message(topic, JSONObject.toJSONString(msg).getBytes());
+        Message message = new Message(RocketMQConfig.getWebsocketTopic(topic), JSONObject.toJSONString(msg).getBytes());
         //由调用接口的方式触发消息
         message.putUserProperty(Constants.Trigger, WebsocketMessage.Trigger.HTTP.code + "");
         return message;

@@ -1,6 +1,6 @@
 package com.huangliang.cloudpushwebsocket.service.websocket.handlerPing;
 
-import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
 import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import com.huangliang.cloudpushwebsocket.service.websocket.IWebSocketService;
 import io.netty.channel.Channel;
@@ -21,7 +21,7 @@ public class PingWebSocketService implements IWebSocketService {
     @Override
     public void handler(ChannelHandlerContext ctx,WebSocketFrame frame) {
         Channel channel = ctx.channel();
-        log.info("[{}]Ping来了。。。。",channel.attr(Constants.attrChannelId).get());
+        log.info("[{}]Ping来了。。。。",channel.attr(AttrConstants.channelId).get());
         //写回pong响应
         ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
         //更新活跃时间

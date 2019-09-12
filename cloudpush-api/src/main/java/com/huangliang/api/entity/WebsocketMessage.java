@@ -48,6 +48,17 @@ public class WebsocketMessage implements Serializable {
         this.trigger = trigger;
     }
 
+    public WebsocketMessage(String requestId, String sessionId, String messageId, Integer type, String to, String msg, String from, Integer trigger) {
+        this.requestId = requestId;
+        this.sessionId = sessionId;
+        this.messageId = messageId;
+        this.type = type;
+        this.to = to;
+        this.msg = msg;
+        this.from = from;
+        this.trigger = trigger;
+    }
+
     //消息类型标识
     public enum Type {
         //发送的业务类型消息

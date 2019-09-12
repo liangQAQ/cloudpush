@@ -1,9 +1,13 @@
 package com.huangliang.cloudpushwebsocket.service.message;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.config.RocketMQConfig;
 import com.huangliang.api.constants.Constants;
 import com.huangliang.api.entity.WebsocketMessage;
+import com.huangliang.api.entity.request.SendRequest;
+import com.huangliang.api.util.UUIDUtils;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
 import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import io.github.rhwayfun.springboot.rocketmq.starter.common.AbstractRocketMqConsumer;
 import io.github.rhwayfun.springboot.rocketmq.starter.constants.RocketMqContent;
@@ -31,27 +35,29 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
     private String instanceId;
 
     @Autowired
-    private ChannelService clientsService;
+    private ChannelService channelService;
+
+    @Autowired
+    private MessageSendService messageSendService;
 
     @Override
     public boolean consumeMsg(RocketMqContent content, MessageExt msg) {
         try {
-            log.info("=====消费消息:"+new String(msg.getBody()));
-            //msg中tag存的是客户端对应的标识
-            Channel channel = clientsService.get(msg.getTags());
-            if(channel == null){
-                log.info("不存在的客户端");
-                return false;
+            String MqMessage = new String(msg.getBody());
+            log.info("=====消费消息:"+MqMessage);
+            //消息内容
+            SendRequest request = JSON.parseObject(MqMessage,SendRequest.class);
+            if(request.getSendToAll()){
+                //遍历该服务上的所有客户端进行推送
+                for(String channelId : channelService.getAll().keySet()){
+                    messageSendService.sendMessage(channelId,getMessage(channelId,request,msg));
+                }
+                return true;
             }
-            if(!channel.isOpen()) {
-                log.info("[{}]客户端不可达，消息丢弃",channel.attr(com.huangliang.cloudpushwebsocket.constants.Constants.attrChannelId).get());
-                return false;
+            //根据请求标识进行推送
+            for(String channelId : request.getTo()){
+                messageSendService.sendMessage(channelId,getMessage(channelId,request,msg));
             }
-            //发起推送
-//            channel.writeAndFlush(new TextWebSocketFrame(new String(msg.getBody())));
-            channel.writeAndFlush(getMessage(msg));
-            //更新活跃时间
-            clientsService.updateActiveTime(channel);
             return true;
         }catch (Exception e){
             log.error("推送失败.",e);
@@ -60,16 +66,18 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
     }
 
     //构造推送消息体
-    private TextWebSocketFrame getMessage(MessageExt msg) {
+    private WebsocketMessage getMessage(String channelId,SendRequest request,MessageExt msg) {
         WebsocketMessage websocketMsg = new WebsocketMessage(
-                msg.getMsgId(),
+                request.getRequestId(),
+                channelService.get(channelId).attr(AttrConstants.sessionId).get(),
+                UUIDUtils.getUUID(),
                 WebsocketMessage.Type.BUSSINESS.code,
-                msg.getTags(),
-                new String(msg.getBody()),
-                Constants.SYSTEM,
+                channelId,
+                request.getMsg(),
+                request.getFrom(),
                 Integer.parseInt(msg.getUserProperty(Constants.Trigger))
                 );
-        return new TextWebSocketFrame(JSONObject.toJSONString(websocketMsg));
+        return websocketMsg;
     }
 
 

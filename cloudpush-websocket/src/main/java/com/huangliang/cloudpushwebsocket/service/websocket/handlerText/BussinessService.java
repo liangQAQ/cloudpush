@@ -4,7 +4,7 @@ import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.api.util.RedisUtils;
 import com.huangliang.cloudpushwebsocket.config.ComConfig;
-import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
 import com.huangliang.cloudpushwebsocket.service.message.MessageSendService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -72,7 +72,7 @@ public class BussinessService implements IMessageService {
         }
         websocketMessage.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);
         websocketMessage.setType(WebsocketMessage.Type.BUSSINESS.code);
-        websocketMessage.setFrom(channel.attr(Constants.attrChannelId).get());
+        websocketMessage.setFrom(channel.attr(AttrConstants.channelId).get());
         return true;
     }
 }

@@ -23,6 +23,11 @@ public class SendRequest extends AbstractRequest implements Serializable {
     @ApiModelProperty(value="推送消息的内容" ,required=true)
     private String msg;
 
+    /**
+     * 推送发起者默认系统
+     */
+    private String from = "system";
+
     @ApiModelProperty(value="延时推送(单位秒,暂未实现)" ,required=false)
     private Integer delay;
 

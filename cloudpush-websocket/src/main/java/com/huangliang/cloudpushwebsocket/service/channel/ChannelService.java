@@ -1,30 +1,24 @@
 package com.huangliang.cloudpushwebsocket.service.channel;
 
-import com.google.common.primitives.Bytes;
 import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.Client;
 import com.huangliang.api.util.DateUtils;
 import com.huangliang.api.util.ObjUtils;
 import com.huangliang.cloudpushwebsocket.config.ComConfig;
-import com.huangliang.cloudpushwebsocket.constants.Constants;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
 import com.huangliang.cloudpushwebsocket.task.UpdateRedisChannelActiveTimeTask;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -73,9 +67,11 @@ public class ChannelService {
             //缓存服务端与客户端关联信息
             redisTemplate.opsForSet().add(RedisPrefix.PREFIX_SERVERCLIENTS+config.getInstanceId(),channelId);
             //给channel对象绑定客户端channelId标识
-            channel.attr(Constants.attrChannelId).set(channelId);
+            channel.attr(AttrConstants.channelId).set(channelId);
+            //给channel对象绑定客户端sessionId会话标识，一次连接保持一致的值
+            channel.attr(AttrConstants.sessionId).set(config.getInstanceId()+"_"+channelId+"_"+DateUtils.getCurrentDateTimeFormat());
             //更新活跃时间
-            channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
+            channel.attr(AttrConstants.activeTime).set(System.currentTimeMillis()+"");
 
             redisTemplate.executePipelined(new RedisCallback<Object>() {
                 @Override
@@ -108,7 +104,7 @@ public class ChannelService {
         if(!StringUtils.isNotEmpty(channelId)){return;}
         if(get(channelId)==null){return;}
         try {
-            String dateTime = channels.get(channelId).attr(Constants.attrActiveTime).get();
+            String dateTime = channels.get(channelId).attr(AttrConstants.activeTime).get();
             //删除自己节点维护的客户端列表
             channels.remove(channelId);
             //删除redis中维护的客户端信息
@@ -129,10 +125,10 @@ public class ChannelService {
      */
     public void updateActiveTime(Channel channel){
         //更新自己维护的信息
-        channel.attr(Constants.attrActiveTime).set(System.currentTimeMillis()+"");
+        channel.attr(AttrConstants.activeTime).set(System.currentTimeMillis()+"");
         //更新redis维护的信息
-        //redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(Constants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
-        updateRedisChannelActiveTimeTask.addChannel(channel.attr(Constants.attrChannelId).get());
+        //redisTemplate.opsForHash().put(RedisPrefix.PREFIX_CLIENT+channel.attr(AttrConstants.attrChannelId).get(),"lastActiveTime" ,DateUtils.dateToDateTime(now));
+        updateRedisChannelActiveTimeTask.addChannel(channel.attr(AttrConstants.channelId).get());
     }
 
 }

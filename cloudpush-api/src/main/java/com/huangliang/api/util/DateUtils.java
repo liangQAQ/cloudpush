@@ -8,6 +8,7 @@ public class DateUtils {
     public static String DATE_FORMAT = "yyyy-MM-dd";
 
     public static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static String DATE_TIME_FORMAT_II = "yyyyMMddHHmmss";
 
     public static String DATE_FORMAT_CHINESE = "yyyy年M月d日";
 
@@ -35,6 +36,12 @@ public class DateUtils {
     public static String getCurrentDateTime() {
         String datestr = null;
         SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT);
+        datestr = df.format(new Date());
+        return datestr;
+    }
+    public static String getCurrentDateTimeFormat() {
+        String datestr = null;
+        SimpleDateFormat df = new SimpleDateFormat(DateUtils.DATE_TIME_FORMAT_II);
         datestr = df.format(new Date());
         return datestr;
     }

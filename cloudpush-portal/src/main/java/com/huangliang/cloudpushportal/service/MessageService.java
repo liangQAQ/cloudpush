@@ -5,6 +5,7 @@ import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.api.entity.request.SendRequest;
 import com.huangliang.api.util.RedisUtils;
+import com.huangliang.cloudpushportal.service.messagedispatch.MQDispatchServiceImpl;
 import com.huangliang.cloudpushportal.service.messagedispatch.MessageDispatchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.Message;
@@ -13,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -24,7 +26,7 @@ public class MessageService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-    @Autowired
+    @Resource(name = "MQDispatchServiceImpl")
     private MessageDispatchService messageDispatchService;
 
     public void execute(SendRequest request) {
@@ -40,7 +42,7 @@ public class MessageService {
             //2.消息分发给具体的websocket实例处理
             //serverKey => serverclients_10.9.217.160:9003
             for(String serverKey : set){
-                messageDispatchService.send(serverKey,request);
+                messageDispatchService.send(serverKey.split("\\_")[1],request);
             }
         }else{
             //根据参数中的客户端标识,找出所在的服务器，先对应的服务器发起推送
@@ -67,8 +69,9 @@ public class MessageService {
                     hostClientsMap.put(host,clients);
                 }
             }
-            for(String hostItem : hostClientsMap.keySet()){
-                messageDispatchService.send(hostItem,request);
+            for(Map.Entry<String,List<String>> entry: hostClientsMap.entrySet()){
+                request.setTo(entry.getValue());
+                messageDispatchService.send(entry.getKey(),request);
             }
         }
     }
