@@ -15,7 +15,7 @@
     1.websocket实例收到客户端的ws握手请求以后，将客户端的推送标识，处理握手的websocket服务实例名
     （当websocket模块集群部署时，应用名都为websocket，实例名各不相同）等相关信息记录进redis。
     2.portal模块对外暴露的接口接收请求
-    根据请求中的客户端推送标识从redis中找出对应客户端所在的websocket实例，
-    向具体客户端所在的websocket实例发送消息。
-    3.对应websocket实例接收请求对客户端发起websocket消息推送
+    根据请求中的客户端推送标识从redis中找出对应客户端所在的websocket实例
+    向具体客户端所在的websocket实例的MQ topic进行投递发送消息。
+    3.订阅该topic的websocket实例消费MQ中的消息,对客户端发起websocket消息推送
     
