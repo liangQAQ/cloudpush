@@ -1,6 +1,6 @@
 package com.huangliang.cloudpushwebsocket.service;
 
-import com.huangliang.cloudpushwebsocket.util.JsonUtil;
+import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,7 +17,7 @@ public class HttpResponseService {
      * @param object
      */
     public void responseJson(ChannelHandlerContext ctx, Object object) {
-        String context = JsonUtil.objectToJson(object);
+        String context = JSONObject.toJSONString(object);
         response(ctx,context);
     }
 
