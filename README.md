@@ -1,9 +1,9 @@
-![1566284996878](README.assets/1566284996878.png)
+![cloudpush-logo](README/pic/cloudpush-logo.png)
 
-# cloudpush- 分布式推送实战
+# cloudpush- 分布式推送产品
 cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学习微服务架构的同时，实现一个基于websocket协议，可平滑水平拓展的分布式推送产品。
 # 应用架构图
-![1565533924343](README/assets/1565533924343.png)
+![cloudpush-framework](README/pic/cloudpush-framework.png)
 
 # 项目用到的技术
 目前核心的技术栈采用的是SpringBoot2.0.1.RELEASE
@@ -19,7 +19,6 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 * Nacos
 * Redis
 * RocketMQ
-
 
 # 项目模块说明
 
