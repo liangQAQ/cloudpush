@@ -1,4 +1,4 @@
-package com.huangliang.cloudpushwebsocket.aspect;
+package com.huangliang.cloudpushportal.aspect;
 
 import com.huangliang.api.constants.CommonConsts;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +23,14 @@ public class LogAdvice {
     }
 
     @Around(value = "log()")       //环绕增强，切点为log这个切点
-    public void around(ProceedingJoinPoint point) throws Throwable {     //这里使用参数为ProceedingJoinPoint 类型，只有环绕增强可以使用，并且在方法中必须执行proceed方法，否则被增强的方法不会执行
+    public Object around(ProceedingJoinPoint point) throws Throwable {     //这里使用参数为ProceedingJoinPoint 类型，只有环绕增强可以使用，并且在方法中必须执行proceed方法，否则被增强的方法不会执行
         Long start = System.currentTimeMillis();
         Object result = point.proceed();
         Long end = System.currentTimeMillis();
         Method method = ((MethodSignature)point.getSignature()).getMethod();
         RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
         log.info("调用{},耗时[{}ms],参数[{}]",requestMapping.value(),end-start,generateParam(method,point.getArgs()));
+        return result;
     }
 
     private String generateParam(Method method, Object[] args) {

@@ -19,7 +19,6 @@ public class MessageController {
     @Autowired
     private MessageHttpService messageHttpService;
 
-    @LogOperate
     @RequestMapping("/message/send")
     public Data sendToAllClient(@RequestBody SendRequest request){
         messageHttpService.send(request);

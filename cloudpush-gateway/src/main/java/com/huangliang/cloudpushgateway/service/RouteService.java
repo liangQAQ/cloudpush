@@ -64,7 +64,7 @@ public class RouteService {
             currentRoutes.add(route);
         }
         this.routes = currentRoutes;
-        log.info("刷新路由配置成功.");
+        log.info("websocket刷新路由配置成功:"+currentRoutes);
     }
 
     private RouteDefinition getRouteDefinition(String url,String websocketUrl){
