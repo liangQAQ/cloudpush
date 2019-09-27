@@ -43,35 +43,43 @@ public class RouteService {
 
     private List<RouteDefinition> routes = null;
 
-    private long lastActiveTime = System.currentTimeMillis();
-
-    //当有请求时,定时刷新websocket路由表配置
+    //30s刷新一次本地缓存
     @PostConstruct
-    @Scheduled(fixedRate=60000)
+    @Scheduled(fixedRate=30000)
     public void refresh(){
         List<RouteDefinition> currentRoutes = new ArrayList<>();
         //获取websocket服务的实例列表
         Map<String,String> map = redisTemplate.opsForHash().entries(RedisPrefix.WEBSOCKETSERVER);
+        //获取websocket服务的实例对应的权重列表
+        Map<String,Integer> instantceWeight = redisTemplate.opsForHash().entries(RedisPrefix.WEBSOCKETWEIGHT);
+        int totalCount = 0;
+        int instanceCount = 0;
         for(Map.Entry<String,String> entry : map.entrySet()){
             if(StringUtils.isEmpty(entry.getValue())){
                 continue;//只返回设置好netty websocket端口的实例地址
             }
+            RouteDefinition route = getRouteDefinition(entry,instantceWeight);
+            currentRoutes.add(route);
+            totalCount = totalCount + instanceCount ;
+        }
+        this.routes = currentRoutes;
+    }
+
+    /**
+     *
+     * @param entry      websocket实例名  对应的端口
+     * @param instanceWeight    对应的实例权重
+     * @return
+     */
+    private RouteDefinition getRouteDefinition(Map.Entry<String,String> entry,Map<String,Integer> instanceWeight){
+        RouteDefinition r = new RouteDefinition();
+        try {
             String websocketUrl =CommonConsts.STRING_WS //ws://
                     +entry.getKey().split(CommonConsts.COLON_FLAG)[0]//ip
                     +CommonConsts.COLON_FLAG+entry.getValue()//:port
                     +CommonConsts.FILE_SEPARATOR;// /
-            RouteDefinition route = getRouteDefinition(websocketUrl,websocketUrl);
-            currentRoutes.add(route);
-        }
-        this.routes = currentRoutes;
-        log.info("websocket刷新路由配置成功:"+currentRoutes);
-    }
-
-    private RouteDefinition getRouteDefinition(String url,String websocketUrl){
-        RouteDefinition r = new RouteDefinition();
-        try {
             r.setId(WS_Predicate_GROUP+"_"+websocketUrl);
-            r.setUri(new URI(url));
+            r.setUri(new URI(websocketUrl));
         } catch (URISyntaxException e) {
             log.error("路径异常",e);
         }
@@ -87,7 +95,7 @@ public class RouteService {
         PredicateDefinition weight = new PredicateDefinition();
         weight.setName("Weight");
         weight.addArg("weight.group",WS_Predicate_GROUP);
-        weight.addArg("weight.weight","1");//每个url权重都是1
+        weight.addArg("weight.weight",instanceWeight==null?"1":instanceWeight.get(entry.getKey())+"");
         predicateDefinitions.add(weight);
 
         r.setPredicates(predicateDefinitions);
