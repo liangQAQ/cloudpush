@@ -1,4 +1,4 @@
-hostip: 10.9.212.111
+hostip: 10.9.212.120
 
 server:
   port: 9000 #内置tomcat启动的端口号(集群需不同名)

@@ -23,6 +23,8 @@ import javax.annotation.Resource;
 public class Server {
 
     private static final int InitPort = 9003;
+    private static final int tryMaxCount = 3;
+    private static int tryCount = 0;
     private static String nettyPort = "";
     private static final String url = "127.0.0.1";
 
@@ -102,7 +104,17 @@ public class Server {
             log.info("设置实例[{}]的netty端口为[{}].",instanceId,nettyPort);
         }else{
             log.info("不存在[{}]的实例,netty初始化失败...",instanceId);
-            System.exit(0);
+            tryCount++;
+            if(tryCount<=tryMaxCount){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    log.error("启动失败，继续尝试",e);
+                }
+                setRedisWebsocketPort();
+            }else{
+                System.exit(0);
+            }
 //            throw new
 //            try {
 //                Thread.sleep(2000);

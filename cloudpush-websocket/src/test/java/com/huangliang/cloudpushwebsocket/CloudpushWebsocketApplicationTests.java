@@ -1,16 +1,23 @@
 package com.huangliang.cloudpushwebsocket;
 
+import com.huangliang.api.constants.RedisPrefix;
+import com.netflix.discovery.converters.Auto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
 import java.util.Map;
 
-//@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class CloudpushWebsocketApplicationTests {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Test
     public void contextLoads() {
@@ -31,8 +38,6 @@ public class CloudpushWebsocketApplicationTests {
                 }
             }
         }
-
-
         System.out.println(a);
     }
 
