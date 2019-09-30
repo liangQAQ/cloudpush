@@ -50,8 +50,8 @@ public class ScanClientsNotOnline {
         List<String> delKeys = new ArrayList<>();
         for(String key : channels.keySet()){
             channel = channelService.get(key);
-            //判断在线
-            if(!channel.isOpen()&&outOfTime(channel)){
+            //判断上一次的活跃时间
+            if(outOfTime(channel)){
                 //如果在离线就删除
                 delKeys.add(key);
             }else{
@@ -69,7 +69,7 @@ public class ScanClientsNotOnline {
 
     private boolean outOfTime(Channel channel) {
         String activeTime = channel.attr(AttrConstants.activeTime).get();
-        if(System.currentTimeMillis()-Long.parseLong(activeTime)>config.getIntervalTime()){
+        if(System.currentTimeMillis()-Long.parseLong(activeTime)>config.getIntervalTime()*1000){
             return true;
         }else{
             return false;
