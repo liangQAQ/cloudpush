@@ -57,11 +57,11 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 项目对你有帮助或者启发的话
 
 * 老哥点个star
-* 甚至打赏瓶水也ok O(∩_∩)O ![wx](README/pic/wx.png)
-
+* 甚至打赏瓶水也ok O(∩_∩)O<br/>
+![wx](README/pic/wx_money.png)
 
 
 # 技术交流及问题解答
-
+* 微信号:<br/>![wx](README/pic/wx_money.png)
 
 
