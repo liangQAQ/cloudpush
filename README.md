@@ -27,41 +27,40 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 | cloudpush-api 公共组件部分                                    | jar       | 公共组件，很多地方都有引用         |
 | cloudpush-eureka 注册中心                           | web项目  | 其他组件的注册中心，方便平滑的上下线服务                      |
 | cloudpush-portal 接口服务                  | web项目   | 提供http接口服务                                             |
-| cloudpush-websocket 推送服务                | web项目  | 由springboot启动的一个netty服务，对外的netty端口提供websocket的握手，消息的收发服务                    |
-| cloudpush-gateway 统一网关    | web项目   | 统一入口,便于未来鉴权，现在用作根据各个cloudpush-websocket实例上所维持的客户端数量，生成ws连接的动态路由规则（优先分配给连接数较少的实例）|
-| wiki                                                         |           | 安装帮助文档           |
+| cloudpush-task 后台计算服务                  | web项目   | 现仅仅根据各个websocket的连接数计算路由权重存进redis，不是运行系统的必要条件|     
+| cloudpush-websocket 推送服务                | web项目  | 由springboot启动的一个netty服务，启动的netty端口提供websocket的握手，消息的收发服务                    |
+| cloudpush-gateway 统一网关    | web项目   | 统一入口,便于未来鉴权，现在用作根据redis中的websocket路由权重，生成ws连接的动态路由规则（优先分配给连接数较少的实例）|
+
 
 # 项目开发进度
+## 后台实现的功能有
+
+* 推送功能(根据客户端的连接时的标识参数,以http请求或者websocket消息的形式，给一个或者多个客户端推送指定内容的websocket消息)
+* 踢出过期客户端功能(客户端上报心跳，或者接收到推送的行为，都会刷新所在的websocket节点所维护的客户端的活跃时间)
 
 ## 前台项目整体的规划有
 
 * 提供管理后台页面
 
-![1565235690613](README.assets/1565235690613.png)
-
 ## 后台规划
 
+* 接入监控组件对应用所在服务器的cpu、网卡、内存等健康指标的监控
 * 结合客户端收到消息的回执和在推送流程中的埋点，接入ELK组件实现对消息送达率，客户端会话时长的统计
 
 # 效果图
-
-
-# 项目架构图
-
-
-
 
 
 
 
 # 如何贡献
 
-非常欢迎您对cloudpush的开发作出贡献
+项目对你有帮助或者启发的话
 
+* 老哥点个star
+* 打赏瓶水
 
 
 # 技术交流及问题解答
 
 
->  作者的个人博客
 
