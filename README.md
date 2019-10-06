@@ -57,7 +57,8 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 项目对你有帮助或者启发的话
 
 * 老哥点个star
-* 打赏瓶水
+* 甚至打赏瓶水也ok O(∩_∩)O ![wx](README/pic/wx.png)
+
 
 
 # 技术交流及问题解答
