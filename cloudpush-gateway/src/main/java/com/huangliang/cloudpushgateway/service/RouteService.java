@@ -95,7 +95,7 @@ public class RouteService {
         PredicateDefinition weight = new PredicateDefinition();
         weight.setName("Weight");
         weight.addArg("weight.group",WS_Predicate_GROUP);
-        weight.addArg("weight.weight",instanceWeight==null?"1":instanceWeight.get(entry.getKey())+"");
+        weight.addArg("weight.weight",instanceWeight.size()<=0?"1":instanceWeight.get(entry.getKey())+"");
         predicateDefinitions.add(weight);
 
         r.setPredicates(predicateDefinitions);
