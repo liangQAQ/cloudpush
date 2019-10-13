@@ -35,7 +35,7 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 # 项目开发进度
 ## 注意事项
 
-* 项目中为了性能考虑，用到了redis的管道特性，无法使用cluster集群模式，所以。。要么一个master处理写操作，要么使用Codis作代理，实现redis集群多个master执行写操作。
+* 项目中为了性能考虑，用到了redis的管道特性，无法使用cluster集群模式，所以。。要么一个master处理写操作，要么使用Codis作代理，实现redis集群多个master处理写操作。
 
 ## 后台实现的功能有
 
