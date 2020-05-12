@@ -102,11 +102,13 @@ public class ChannelService {
      */
     public void remove(String channelId){
         if(!StringUtils.isNotEmpty(channelId)){return;}
-        if(get(channelId)==null){return;}
+        Channel channel = get(channelId);
+        if(channel==null){return;}
         try {
-            String dateTime = channels.get(channelId).attr(AttrConstants.activeTime).get();
+            String dateTime = channel.attr(AttrConstants.activeTime).get();
             //删除自己节点维护的客户端列表
             channels.remove(channelId);
+//            channel.closeFuture().addListener()
             //删除redis中维护的客户端信息
             redisTemplate.delete(RedisPrefix.PREFIX_CLIENT+channelId);
             //删除redis中客户端与host的关联关系

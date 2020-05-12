@@ -5,6 +5,7 @@ import com.huangliang.api.constants.Constants;
 import com.huangliang.api.constants.RedisPrefix;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,7 +96,7 @@ public class RouteService {
         PredicateDefinition weight = new PredicateDefinition();
         weight.setName("Weight");
         weight.addArg("weight.group",WS_Predicate_GROUP);
-        weight.addArg("weight.weight",instanceWeight==null?"1":instanceWeight.get(entry.getKey())+"");
+        weight.addArg("weight.weight",instanceWeight==null||instanceWeight.size()==0?"1":instanceWeight.get(entry.getKey())+"");
         predicateDefinitions.add(weight);
 
         r.setPredicates(predicateDefinitions);
