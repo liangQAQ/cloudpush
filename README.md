@@ -1,4 +1,4 @@
-![cloudpush-logo](README/pic/cloudpush-logo.png)
+![cloudpush-logo](https://user-images.githubusercontent.com/34015654/83089011-d45ca980-a0c7-11ea-8269-c8310a72a1da.png)
 
 # cloudpush- 分布式推送产品
 cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学习微服务架构的同时，实现一个基于websocket协议，可平滑水平拓展的分布式推送产品。  
@@ -8,7 +8,7 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 [启动教程](https://github.com/liangQAQ/cloudpush/wiki)
 
 # 应用架构图
-![cloudpush-framework](README/pic/cloudpush-framework.png)
+![cloudpush-framework](https://user-images.githubusercontent.com/34015654/83088815-5c8e7f00-a0c7-11ea-9dc3-0fa36b90d614.png)
 
 # 项目用到的技术
 目前核心的技术栈采用的是SpringBoot2.0.1.RELEASE
@@ -68,10 +68,10 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 * 老哥点个star
 * 提个issue或者pr参与开发
 * 甚至打赏瓶水也ok O(∩_∩)O<br/>
-![wx](README/pic/wx_money.png)
+![wx](https://user-images.githubusercontent.com/34015654/83089024-daeb2100-a0c7-11ea-8957-a92ac26c3381.png)
 
 
 # 技术交流及问题解答
-* 微信号:<br/>![wx](README/pic/wx_money.png)
+* 微信号:<br/>![wx](https://user-images.githubusercontent.com/34015654/83089019-d7f03080-a0c7-11ea-95ad-66537db7c448.png)
 
 
