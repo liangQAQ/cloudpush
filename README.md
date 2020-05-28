@@ -73,7 +73,7 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 
 # 技术交流及问题解答
 * 微信号:  
-![wx+](README/pic/wx%2B.png)  
+![wx+](README/pic/wx%2B.jpg)  
 申请表明来意
 
 
