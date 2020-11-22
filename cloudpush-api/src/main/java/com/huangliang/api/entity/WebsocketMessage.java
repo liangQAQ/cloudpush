@@ -1,5 +1,6 @@
 package com.huangliang.api.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -8,8 +9,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +29,7 @@ public class WebsocketMessage implements Serializable {
     private String to;
     //消息内容
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
-    private String msg;
+    private JSONObject msg;
     //来源
     @JsonIgnore
     private String from;
@@ -39,7 +38,7 @@ public class WebsocketMessage implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date activeTime = new Date();
 
-    public WebsocketMessage(String messageId, Integer type, String to, String msg, String from, Integer trigger) {
+    public WebsocketMessage(String messageId, Integer type, String to, JSONObject msg, String from, Integer trigger) {
         this.messageId = messageId;
         this.type = type;
         this.to = to;
@@ -48,7 +47,7 @@ public class WebsocketMessage implements Serializable {
         this.trigger = trigger;
     }
 
-    public WebsocketMessage(String requestId, String sessionId, String messageId, Integer type, String to, String msg, String from, Integer trigger) {
+    public WebsocketMessage(String requestId, String sessionId, String messageId, Integer type, String to, JSONObject msg, String from, Integer trigger) {
         this.requestId = requestId;
         this.sessionId = sessionId;
         this.messageId = messageId;

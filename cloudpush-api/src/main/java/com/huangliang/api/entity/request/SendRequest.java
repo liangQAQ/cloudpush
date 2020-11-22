@@ -1,5 +1,7 @@
 package com.huangliang.api.entity.request;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,7 +23,7 @@ public class SendRequest extends AbstractRequest implements Serializable {
      * 发送内容
      */
     @ApiModelProperty(value="推送消息的内容" ,required=true)
-    private String msg;
+    private JSONObject msg;
 
     /**
      * 推送发起者默认系统
