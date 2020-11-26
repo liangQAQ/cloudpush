@@ -26,7 +26,6 @@ public class Server {
     private static final int tryMaxCount = 3;
     private static int tryCount = 0;
     private static String nettyPort = "";
-    private static final String url = "127.0.0.1";
 
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();

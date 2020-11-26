@@ -14,6 +14,7 @@ public class CloudpushWebsocketApplication implements CommandLineRunner {
     private Server socketServer;
 
     public static void main(String[] args) {
+        init();
         SpringApplication.run(CloudpushWebsocketApplication.class, args);
     }
 
@@ -23,5 +24,10 @@ public class CloudpushWebsocketApplication implements CommandLineRunner {
         ChannelFuture future = socketServer.start();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> socketServer.destroy()));
         future.channel().closeFuture().syncUninterruptibly();
+    }
+
+    private static void init(){
+        //根据网卡动态设置ip（为了将netty的ip:port维护进redis）
+
     }
 }
