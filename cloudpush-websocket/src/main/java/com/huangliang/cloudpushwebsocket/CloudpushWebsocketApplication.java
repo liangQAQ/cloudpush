@@ -3,7 +3,6 @@ package com.huangliang.cloudpushwebsocket;
 import com.huangliang.api.exception.NetException;
 import com.huangliang.api.util.NetUtils;
 import com.huangliang.api.util.YmlUtils;
-import com.huangliang.cloudpushwebsocket.config.ComConfig;
 import com.huangliang.cloudpushwebsocket.netty.Server;
 import io.netty.channel.ChannelFuture;
 import lombok.extern.slf4j.Slf4j;
