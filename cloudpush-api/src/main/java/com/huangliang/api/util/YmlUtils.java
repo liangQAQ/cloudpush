@@ -29,7 +29,7 @@ public class YmlUtils {
             //关闭流
             fileWriter.close();
         } catch (Exception e) {
-            throw new NetException("yaml文件初始化失败！");
+            throw new NetException("yaml文件初始化失败！",e);
         }
     }
 }
