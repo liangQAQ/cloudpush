@@ -60,7 +60,7 @@ public class CloudpushWebsocketApplication implements CommandLineRunner {
                     log.error("初始化ip失败:{}",e);
                     System.exit(0);
                 }
-                log.info("自动获取ip为[{}],若此ip不是与gateway通信的内网ip，请尝试通过jvm参数指定",localIP);
+                log.info("自动获取ip为[{}],若此ip不是与网关gateway通信的内网ip，请尝试通过jvm参数指定",localIP);
             }else{
                 log.info("初始化ip失败");
                 System.exit(0);
