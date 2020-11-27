@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class ComConfig {
+    @Value("${hostip}")
+    private String hostip;
     @Value("${eureka.instance.instance-id}")
     private String instanceId;
     @Value("${config.client.interval-time}")

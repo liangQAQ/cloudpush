@@ -17,6 +17,7 @@
 package com.huangliang.api.util;
 
 
+import com.huangliang.api.exception.ServiceException;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ import java.util.regex.Pattern;
 import static java.util.Collections.emptyList;
 
 /**
- * IP and Port Helper for RPC
+ * IP and Port Helper for netty
  */
 public class NetUtils {
 
@@ -160,6 +161,7 @@ public class NetUtils {
             } catch (UnknownHostException e) {
                 // ignore
 //                logger.debug("Unknown IPV6 address: ", e);
+                throw new ServiceException("Unknown IPV6 address");
             }
         }
         return address;
@@ -176,7 +178,7 @@ public class NetUtils {
         if (address != null) {
             return HOST_ADDRESS = address.getHostAddress();
         }
-        return LOCALHOST_VALUE;
+        return null;
     }
 
     /**
