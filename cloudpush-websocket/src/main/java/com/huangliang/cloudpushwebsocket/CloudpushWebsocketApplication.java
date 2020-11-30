@@ -1,8 +1,6 @@
 package com.huangliang.cloudpushwebsocket;
 
-import com.huangliang.api.exception.NetException;
 import com.huangliang.api.util.NetUtils;
-import com.huangliang.api.util.YmlUtils;
 import com.huangliang.cloudpushwebsocket.netty.Server;
 import io.netty.channel.ChannelFuture;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CloudpushWebsocketApplication implements CommandLineRunner {
 
     private static String yamlPath = "application.yml";
+//    private static String yamlPath = "src/main/resources/application.yml";
     private static String yamlKey = "hostip";
 
     @Value("${hostip}")
@@ -51,20 +50,11 @@ public class CloudpushWebsocketApplication implements CommandLineRunner {
             log.info("jvm启动参中指定ip为[{}]",hostip);
             return ;
         }else{
-            log.info("jvm启动参数中未指定ip,尝试自动获取ip...使用'java -jar -Dhostip=x.x.x.x'即可手动指定ip");
             String localIP = NetUtils.getLocalHost();
-            if(StringUtils.isNotEmpty(localIP)){
-                try {
-                    YmlUtils.updateYamlFile(yamlPath,yamlKey,localIP);
-                } catch (NetException e) {
-                    log.error("初始化ip失败:{}",e);
-                    System.exit(0);
-                }
-                log.info("自动获取ip为[{}],若此ip不是与网关gateway通信的内网ip，请尝试通过jvm参数指定",localIP);
-            }else{
-                log.info("初始化ip失败");
-                System.exit(0);
-            }
+            hostip = localIP;
+            System.setProperty(yamlKey,localIP);
+            log.info("自动获取ip为[{}]",localIP);
         }
+        log.info("若此ip不是与网关gateway通信的内网ip，请尝试通过jvm参数指定[{}]","java -jar -Dhostip=x.x.x.x");
     }
 }

@@ -87,8 +87,13 @@ public class Server {
     }
 
     private void init(){
-        //设置redis中记录的websocket服务地址的连接端口
-        setRedisWebsocketPort();
+        try {
+            //设置redis中记录的websocket服务地址的连接端口
+            setRedisWebsocketPort();
+        }catch (Exception e){
+            log.error("初始化失败，程序退出...",e);
+            System.exit(0);
+        }
     }
 
     public void destroy() {
