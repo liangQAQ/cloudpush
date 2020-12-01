@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CloudpushWebsocketApplication implements CommandLineRunner {
 
     private static String yamlPath = "application.yml";
-//    private static String yamlPath = "src/main/resources/application.yml";
     private static String yamlKey = "hostip";
 
     @Value("${hostip}")
@@ -51,10 +50,9 @@ public class CloudpushWebsocketApplication implements CommandLineRunner {
             return ;
         }else{
             String localIP = NetUtils.getLocalHost();
-            hostip = localIP;
             System.setProperty(yamlKey,localIP);
             log.info("自动获取ip为[{}]",localIP);
         }
-        log.info("若此ip不是与网关gateway通信的内网ip，请尝试通过jvm参数指定[{}]","java -jar -Dhostip=x.x.x.x");
+        log.info("若此ip不是与网关gateway通信的内网ip，请尝试通过启动参数指定[{}]","java -jar -Dhostip=x.x.x.x");
     }
 }
