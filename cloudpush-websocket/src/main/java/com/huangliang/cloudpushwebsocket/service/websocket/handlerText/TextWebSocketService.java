@@ -44,7 +44,7 @@ public class TextWebSocketService implements IWebSocketService {
         try {
             return JSONObject.parseObject(str, WebsocketMessage.class);
         } catch (Exception e) {
-            log.error("json解析失败,无法识别的消息:{[]}",str);
+            log.error("json解析失败,无法识别的消息:[{}]",str);
             return null;
         }
     }
