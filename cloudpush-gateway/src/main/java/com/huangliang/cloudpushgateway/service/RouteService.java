@@ -44,9 +44,9 @@ public class RouteService {
 
     private List<RouteDefinition> routes = null;
 
-    //30s刷新一次本地缓存
+    //10s刷新一次本地缓存
     @PostConstruct
-    @Scheduled(fixedRate=30000)
+    @Scheduled(fixedRate=10000)
     public void refresh(){
         List<RouteDefinition> currentRoutes = new ArrayList<>();
         //获取websocket服务的实例列表
