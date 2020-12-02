@@ -106,6 +106,8 @@ public class ChannelService {
         if(channel==null){return;}
         try {
             String dateTime = channel.attr(AttrConstants.activeTime).get();
+            //断开当前连接
+            get(channelId).close();
             //删除自己节点维护的客户端列表
             channels.remove(channelId);
 //            channel.closeFuture().addListener()
