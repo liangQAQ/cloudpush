@@ -24,13 +24,6 @@ public class WebsocketRequestHandler extends SimpleChannelInboundHandler<WebSock
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, WebSocketFrame frame){
 		try {
-			/**
-			 *  策略模式
-			 * 判断是否关闭链路的指令
-			 * 判断是否ping消息
-			 * 判断是否二进制消息
-			 * 判断是否文本消息
-			 */
 			websocketRequestService.handler(ctx,frame);
 		} catch (Exception e) {
 			log.error("请求异常",e);

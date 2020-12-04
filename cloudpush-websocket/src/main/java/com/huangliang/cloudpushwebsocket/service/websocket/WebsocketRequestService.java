@@ -18,6 +18,17 @@ public class WebsocketRequestService {
     @Autowired
     private ChannelService channelService;
 
+    /**
+     *
+     * 策略模式
+     * 判断是否关闭链路的指令
+     * 判断是否ping消息
+     * 判断是否二进制消息
+     * 判断是否文本消息
+     *
+     * @param ctx
+     * @param frame
+     */
     public void handler(ChannelHandlerContext ctx, WebSocketFrame frame) {
         try {
             //收到消息，先更新维护客户端的活跃时间

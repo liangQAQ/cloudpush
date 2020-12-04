@@ -2,10 +2,8 @@ package com.huangliang.cloudpushportal.controller;
 
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.RedisPrefix;
-import com.huangliang.api.entity.response.Data;
+import com.huangliang.api.entity.response.Response;
 import com.huangliang.cloudpushportal.entity.res.WebsocketServer;
-import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +26,7 @@ public class ServerController {
      * @return
      */
     @RequestMapping(value = "/server/get",method = RequestMethod.GET)
-    public Data getServer(@NotNull String channelId){
+    public Response getServer(@NotNull String channelId){
         String websocketServer = null;
         //查询客户端之前所连接的实例
         Map<String,String> client = redisTemplate.opsForHash().entries(RedisPrefix.PREFIX_CLIENT+channelId);
@@ -40,7 +38,7 @@ public class ServerController {
         Map<String,String> servers = (Map<String, String>) redisTemplate.opsForHash().entries(RedisPrefix.WEBSOCKETSERVER);
 
         if(CollectionUtils.isEmpty(servers)){
-            return new Data<WebsocketServer>(CommonConsts.ERROR,"没有可用的服务，请稍后再试");
+            return new Response<WebsocketServer>(CommonConsts.ERROR,"没有可用的服务，请稍后再试");
         }
 
         if(!servers.containsKey(websocketServer)){
@@ -56,7 +54,7 @@ public class ServerController {
         }
         //解析得到真正的websocket地址
         websocketServer = getWebsocketServer(websocketServer,servers);
-        return new Data<WebsocketServer>(CommonConsts.SUCCESS,CommonConsts.REQUST_SUC,new WebsocketServer(websocketServer));
+        return new Response<WebsocketServer>(CommonConsts.SUCCESS,CommonConsts.REQUST_SUC,new WebsocketServer(websocketServer));
     }
 
     /**

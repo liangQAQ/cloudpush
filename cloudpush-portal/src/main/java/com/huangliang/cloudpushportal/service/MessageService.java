@@ -4,6 +4,7 @@ import com.huangliang.api.constants.Constants;
 import com.huangliang.api.constants.RedisPrefix;
 import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.api.entity.request.SendRequest;
+import com.huangliang.api.exception.ServiceException;
 import com.huangliang.api.util.RedisUtils;
 import com.huangliang.cloudpushportal.service.messagedispatch.MQDispatchServiceImpl;
 import com.huangliang.cloudpushportal.service.messagedispatch.MessageDispatchService;
@@ -29,12 +30,18 @@ public class MessageService {
     @Resource(name = "MQDispatchServiceImpl")
     private MessageDispatchService messageDispatchService;
 
-    public void execute(SendRequest request) {
+    /**
+     * 返回不存在的客户端
+     * @param request
+     * @return
+     */
+    public Set execute(SendRequest request) {
+        checkServer();
         //查询redis中所有的websocket服务
         Set<String> set = redisTemplate.keys(RedisPrefix.PREFIX_SERVERCLIENTS + "*");
-        if (CollectionUtils.isEmpty(set)) {
-            return;
-        }
+        checkServerClients(set);
+        //记录查询不存在的客户端
+        Set<String> notExist = new HashSet<>();
         //<服务端地址,对应的客户端结果集>
         Map<String,List<String>> hostClientsMap = new HashMap<>(set.size());
         if (request.getSendToAll()) {
@@ -57,7 +64,7 @@ public class MessageService {
                 //String host = redisTemplate.opsForHash().get(RedisPrefix.PREFIX_CLIENT + channelId,"host")+"";
                 Object hostObj = pipeResult.get(i);
                 if (hostObj==null) {
-                    log.info("不存在的客户端[{}]", channelId);
+                    notExist.add(channelId);
                     continue;
                 }
                 String host = hostObj.toString();
@@ -69,10 +76,25 @@ public class MessageService {
                     hostClientsMap.put(host,clients);
                 }
             }
+            log.info("不存在的客户端[{}]", notExist);
             for(Map.Entry<String,List<String>> entry: hostClientsMap.entrySet()){
                 request.setTo(entry.getValue());
                 messageDispatchService.send(entry.getKey(),request);
             }
+        }
+
+        return notExist;
+    }
+
+    private void checkServerClients(Set<String> set) {
+        if (CollectionUtils.isEmpty(set)) {
+            throw new ServiceException("没有存在连接的websocket服务");
+        }
+    }
+
+    private void checkServer() {
+        if(redisTemplate.opsForHash().size(RedisPrefix.WEBSOCKETSERVER)<=0){
+            throw new ServiceException("没有可用的websocket服务端");
         }
     }
 }

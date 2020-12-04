@@ -64,6 +64,7 @@ public class RouteService {
             totalCount = totalCount + instanceCount ;
         }
         this.routes = currentRoutes;
+        log.info("刷新websocket服务列表为[{}]",this.routes.toString());
     }
 
     /**

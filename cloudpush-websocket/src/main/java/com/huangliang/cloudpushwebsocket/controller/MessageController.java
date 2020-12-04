@@ -3,7 +3,7 @@ package com.huangliang.cloudpushwebsocket.controller;
 import com.huangliang.api.annotation.LogOperate;
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.entity.request.SendRequest;
-import com.huangliang.api.entity.response.Data;
+import com.huangliang.api.entity.response.Response;
 import com.huangliang.cloudpushwebsocket.service.MessageHttpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ public class MessageController {
     private MessageHttpService messageHttpService;
 
     @RequestMapping("/message/send")
-    public Data sendToAllClient(@RequestBody SendRequest request){
+    public Response sendToAllClient(@RequestBody SendRequest request){
         messageHttpService.send(request);
-        return new Data(CommonConsts.SUCCESS,CommonConsts.REQUST_SUC);
+        return new Response(CommonConsts.SUCCESS,CommonConsts.REQUST_SUC);
     }
 }

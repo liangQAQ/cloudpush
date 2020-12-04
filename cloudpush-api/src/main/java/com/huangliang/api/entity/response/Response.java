@@ -1,13 +1,12 @@
 package com.huangliang.api.entity.response;
 
-
 import com.huangliang.api.constants.CommonConsts;
 
-public class Data<T>
+public class Response<T>
 {
     /**
-     * ret = 0 时返回true
-     * ret != 0 时返回false
+     * code = 0 时返回true
+     * code != 0 时返回false
      */
     private boolean success;
 
@@ -16,31 +15,35 @@ public class Data<T>
      * 0 表示成功
      * 其它表示失败
      */
-    private String ret;
+    private String code;
 
     private String msg;
-
-    /**
-     * 消息说明
-     */
-    private String retInfo;
 
     /**
      * 返回数据
      */
     private T data;
 
-    public Data()
+    public Response()
     {
-        this.ret = CommonConsts.ERROR;
+        this.code = CommonConsts.SUCCESS;
+        this.success = CommonConsts.TRUE;
+        this.msg = CommonConsts.REQUST_SUC;
     }
 
-    public Data(String ret, String retInfo)
+    public Response(String msg,T data)
     {
-        this.ret = ret;
-        this.retInfo = retInfo;
+        this.code = CommonConsts.SUCCESS;
+        this.success = CommonConsts.TRUE;
+        this.data = data;
+        this.msg = msg;
+    }
+
+    public Response(String code, String retInfo)
+    {
+        this.code = code;
         this.msg = retInfo;
-        if (CommonConsts.SUCCESS.equals(ret))
+        if (CommonConsts.SUCCESS.equals(code))
         {
             success = true;
         }
@@ -50,13 +53,12 @@ public class Data<T>
         }
     }
 
-    public Data(String ret, String retInfo, T data)
+    public Response(String code, String msg, T data)
     {
-        this.ret = ret;
-        this.retInfo = retInfo;
-        this.msg = retInfo;
+        this.code = code;
+        this.msg = msg;
         this.data = data;
-        if (CommonConsts.SUCCESS.equals(ret))
+        if (CommonConsts.SUCCESS.equals(code))
         {
             success = true;
         }
@@ -68,22 +70,12 @@ public class Data<T>
 
     public String getRet()
     {
-        return ret;
+        return code;
     }
 
-    public void setRet(String ret)
+    public void setRet(String code)
     {
-        this.ret = ret;
-    }
-
-    public String getRetInfo()
-    {
-        return retInfo;
-    }
-
-    public void setRetInfo(String retInfo)
-    {
-        this.retInfo = retInfo;
+        this.code = code;
     }
 
     public String getMsg()

@@ -5,6 +5,10 @@ public interface CommonConsts
     String REQUST_SUC = "success";
     
     String REQUST_FAIL = "failure";
+
+    Boolean TRUE = true;
+
+    Boolean FALSE = false;
     
     Integer LIMI_TALL = -1;
     

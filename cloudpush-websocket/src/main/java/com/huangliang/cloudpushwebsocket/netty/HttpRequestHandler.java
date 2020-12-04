@@ -2,8 +2,8 @@ package com.huangliang.cloudpushwebsocket.netty;
 
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.Constants;
+import com.huangliang.api.entity.response.Response;
 import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
-import com.huangliang.api.entity.response.Message;
 import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
 import com.huangliang.cloudpushwebsocket.util.NettyUtil;
@@ -67,7 +67,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 		Map<String,String> requestParam = NettyUtil.getRequestParams(req);
 		if(!requestParam.containsKey(Constants.CHANNELID)||!StringUtils.isNotEmpty(requestParam.get(Constants.CHANNELID)))
 		{
-			httpResponseService.responseJson(ctx, new Message(CommonConsts.SUCCESS, ErrorConstants.ErrorChannelId));
+			httpResponseService.responseJson(ctx, new Response<>(CommonConsts.SUCCESS, ErrorConstants.ErrorChannelId));
 			log.error("握手失败:缺少channelId");
 			return ;
 		}

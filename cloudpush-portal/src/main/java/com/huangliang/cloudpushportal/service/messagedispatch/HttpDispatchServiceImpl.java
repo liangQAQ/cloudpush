@@ -1,7 +1,7 @@
 package com.huangliang.cloudpushportal.service.messagedispatch;
 
 import com.huangliang.api.entity.request.SendRequest;
-import com.huangliang.api.entity.response.Data;
+import com.huangliang.api.entity.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +24,7 @@ public class HttpDispatchServiceImpl implements MessageDispatchService {
             try {
                 String url = "http://"+instance+"/message/send";
                 RestTemplate restTemplate = new RestTemplate();
-                restTemplate.postForEntity(url,request,Data.class);
+                restTemplate.postForEntity(url,request, Response.class);
             }catch (Exception e){
                 log.error("发送失败,host="+instance,e);
             }

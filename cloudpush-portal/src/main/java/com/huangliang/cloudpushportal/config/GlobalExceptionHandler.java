@@ -1,19 +1,20 @@
 package com.huangliang.cloudpushportal.config;
 
-import com.huangliang.api.entity.response.Message;
+import com.huangliang.api.constants.CommonConsts;
+import com.huangliang.api.entity.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    public Message defaultErrorHandler(HttpServletRequest request, Exception e)  {
-        //打印异常信息
-        e.printStackTrace();
-        System.out.println("GlobalDefaultExceptionHandler.defaultErrorHandler()");
-        return new Message("false",e.getMessage());
+    @ResponseBody
+    public Response defaultErrorHandler(Exception e)  {
+        log.error(e.getMessage(),e);
+        return new Response(CommonConsts.ERROR,e.getMessage());
     }
 }
