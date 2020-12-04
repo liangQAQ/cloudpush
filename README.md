@@ -59,6 +59,18 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 # 效果图
 
 
+# 消息解析
+{
+	"to": ["1607080309668","1607071389121"],
+	"msg": {
+		"key1": "value",
+		"key2": "value2"
+	},
+	"sendToAll": false
+}
+
+{"activeTime":1607080644685,"from":"system","messageId":"725cf41a5798474fb31a1258bed2d5d8","msg":{"key1":"value","key2":"value2"},"requestId":"f231012a-b2ed-40b1-841a-45538dc48ee1","sessionId":"172.31.236.11:9000_1607080309668_20201204191140","to":"1607080309668","trigger":1,"type":1}  
+
 
 
 # 如何贡献
