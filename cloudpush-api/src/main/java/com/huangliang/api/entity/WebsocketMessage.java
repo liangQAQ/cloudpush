@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class WebsocketMessage implements Serializable {
 
     //消息所属的请求id
@@ -32,7 +34,7 @@ public class WebsocketMessage implements Serializable {
     private JSONObject msg;
     //来源
     @JsonIgnore
-    private String from;
+    private String from = "system";
     //触发类型 1.接口调用触发 2.websocket通信触发
     private Integer trigger;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -60,6 +62,10 @@ public class WebsocketMessage implements Serializable {
 
     //消息类型标识
     public enum Type {
+        //错误代码
+        ERROR(-1,"error"),
+        //发送的业务类型消息
+        CONNECTION(0,"connection"),
         //发送的业务类型消息
         BUSSINESS(1,"bussiness"),
         //发送的业务类型消息的回执

@@ -89,7 +89,8 @@ public class ChannelService {
                 }
             });
             log.info("加入了客户端：[{}]",channelId);
-            return  channels.put(channelId,channel);
+            channels.put(channelId,channel);
+            return channel;
         }catch (Exception e){
             log.error("加入客户端失败:["+channelId+"]",e);
         }

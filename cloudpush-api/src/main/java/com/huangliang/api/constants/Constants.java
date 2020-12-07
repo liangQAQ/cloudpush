@@ -12,7 +12,7 @@ public interface Constants {
 
     String UPGRADE = "Upgrade";
 
-    String SYSTEM = "System";
+    String SYSTEM = "system";
 
     String POST = "POST";
 
@@ -20,6 +20,9 @@ public interface Constants {
 
     String CHANNELID = "channelId";
 
+    String SESSIONID = "sessionId";
+
     String Trigger = "Trigger";
 
+    String MSG = "msg";
 }

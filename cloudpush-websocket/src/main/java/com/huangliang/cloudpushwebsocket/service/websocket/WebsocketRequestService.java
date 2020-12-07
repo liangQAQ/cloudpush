@@ -15,9 +15,6 @@ public class WebsocketRequestService {
     @Autowired
     private WebsocketServiceStrategy websocketServiceStrategy;
 
-    @Autowired
-    private ChannelService channelService;
-
     /**
      *
      * 策略模式
@@ -31,8 +28,6 @@ public class WebsocketRequestService {
      */
     public void handler(ChannelHandlerContext ctx, WebSocketFrame frame) {
         try {
-            //收到消息，先更新维护客户端的活跃时间
-            channelService.updateActiveTime(ctx.channel());
             //处理消息
             websocketServiceStrategy.execute(ctx,frame);
         } catch (Exception e) {

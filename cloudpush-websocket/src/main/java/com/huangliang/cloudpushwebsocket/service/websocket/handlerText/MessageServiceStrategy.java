@@ -1,7 +1,10 @@
 package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.entity.WebsocketMessage;
+import com.huangliang.cloudpushwebsocket.util.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +37,13 @@ public class MessageServiceStrategy {
         IMessageService service = map.get(websocketMessage.getType());
         if(service == null){
             log.info("无法解析的消息类型:"+websocketMessage.toString());
+            channel.writeAndFlush(generate(channel,websocketMessage));
             return;
         }
         service.handler(channel,websocketMessage);
+    }
+
+    private TextWebSocketFrame generate(Channel channel, WebsocketMessage str){
+        return WebsocketMessageGenerateUtils.generateErrorResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel, JSONObject.toJSONString(str)));
     }
 }

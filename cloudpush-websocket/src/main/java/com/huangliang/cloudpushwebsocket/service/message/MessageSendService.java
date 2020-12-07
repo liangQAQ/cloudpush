@@ -34,12 +34,13 @@ public class MessageSendService {
         Channel channel = channelService.get(channelId);
         //0.校验客户端合法性
         if(!checkClient(channel)){
+            log.info("客户端不可达:[{}]",channelId);
             return ;
         }
-        //1.发起对客户端的推送(websocket消息)
-        channel.writeAndFlush(generateMessage(wsMessage));
-        //2.修改本地和redis中维护的客户端的活跃时间
+        //1.修改本地和redis中维护的客户端的活跃时间
         channelService.updateActiveTime(channel);
+        //2.发起对客户端的推送(websocket消息)
+        channel.writeAndFlush(generateMessage(wsMessage));
         //3.记录推送日志
 
     }

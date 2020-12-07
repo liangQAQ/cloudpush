@@ -1,12 +1,16 @@
 package com.huangliang.cloudpushwebsocket.netty;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.constants.Constants;
+import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.api.entity.response.Response;
-import com.huangliang.cloudpushwebsocket.constants.ErrorConstants;
-import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
+import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
+import com.huangliang.cloudpushwebsocket.constants.MessageConstants;
 import com.huangliang.cloudpushwebsocket.service.HttpResponseService;
+import com.huangliang.cloudpushwebsocket.service.channel.ChannelService;
 import com.huangliang.cloudpushwebsocket.util.NettyUtil;
+import com.huangliang.cloudpushwebsocket.util.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -67,7 +71,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 		Map<String,String> requestParam = NettyUtil.getRequestParams(req);
 		if(!requestParam.containsKey(Constants.CHANNELID)||!StringUtils.isNotEmpty(requestParam.get(Constants.CHANNELID)))
 		{
-			httpResponseService.responseJson(ctx, new Response<>(CommonConsts.SUCCESS, ErrorConstants.ErrorChannelId));
+			httpResponseService.responseJson(ctx, new Response<>(CommonConsts.SUCCESS, MessageConstants.ErrorChannelId));
 			log.error("握手失败:缺少channelId");
 			return ;
 		}
@@ -81,9 +85,13 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
 			//处理握手,协议升级
 			handshaker.handshake(ctx.channel(), req);
 			//将客户端放入集合
-			clientsService.put(channelId,channel);
+			channel = clientsService.put(channelId,channel);
 			//以websocket的形式将标识返回
-			ctx.channel().writeAndFlush(new TextWebSocketFrame(channelId));
+			ctx.channel().writeAndFlush(getShakeHandsSuccessResponse(channel));
 		}
+	}
+
+	private TextWebSocketFrame getShakeHandsSuccessResponse(Channel channel){
+		return new TextWebSocketFrame(JSONObject.toJSONString(WebsocketMessageGenerateUtils.generateShakeHands(channel)));
 	}
 }
