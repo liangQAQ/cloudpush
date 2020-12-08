@@ -30,7 +30,7 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 | tools  工具包                                | 压缩包 | 项目，或者测试中需要用的到中间件包，直接用docker更方便。。             |
 | ------------------------------------------------------------ | --------- | ---------------------------------------------------- |
 | cloudpush-api 公共组件部分                                    | jar       | 公共组件，很多地方都有引用         |
-| cloudpush-eureka 注册中心                           | web项目  | 为啥有了nacos还要eureka：通过@EventListener额外增加对websocket服务状态的监听，从而动态地将websocket服务中额外启动的netty服务的ip、port维护进redis                      |
+| cloudpush-eureka 注册中心                           | web项目  | 为啥有了nacos还要eureka：通过@EventListener额外增加对websocket服务状态的监听，从而动态地将websocket服务中额外启动的netty服务的ip、port维护进redis(用zk来维护这个地址也一样)                      |
 | cloudpush-portal 接口服务                  | web项目   | 提供http接口服务                                             |
 | cloudpush-task 后台计算服务                  | web项目   | 现仅仅根据各个websocket的连接数计算路由权重存进redis，不是运行系统的必要条件|     
 | cloudpush-websocket 推送服务                | web项目  | 由springboot启动的一个netty服务，启动的netty端口提供websocket的握手，消息的收发服务                    |
