@@ -44,6 +44,6 @@ public class MessageServiceStrategy {
     }
 
     private TextWebSocketFrame generate(Channel channel, WebsocketMessage str){
-        return WebsocketMessageGenerateUtils.generateErrorResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel, JSONObject.toJSONString(str)));
+        return WebsocketMessageGenerateUtils.generateResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel, JSONObject.toJSONString(str)));
     }
 }

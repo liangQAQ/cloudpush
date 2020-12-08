@@ -1,11 +1,8 @@
 package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
 import com.alibaba.fastjson.JSONObject;
-import com.huangliang.api.constants.Constants;
 import com.huangliang.api.entity.WebsocketMessage;
-import com.huangliang.api.util.UUIDUtils;
 import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
-import com.huangliang.cloudpushwebsocket.constants.MessageConstants;
 import com.huangliang.cloudpushwebsocket.service.websocket.IWebSocketService;
 import com.huangliang.cloudpushwebsocket.util.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
@@ -65,6 +62,6 @@ public class TextWebSocketService implements IWebSocketService {
     }
 
     private TextWebSocketFrame errorResponse(Channel channel,String str){
-        return WebsocketMessageGenerateUtils.generateErrorResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel,str));
+        return WebsocketMessageGenerateUtils.generateResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel,str));
     }
 }

@@ -62,7 +62,7 @@ public class WebsocketMessageGenerateUtils {
         return websocketMsg;
     }
 
-    public static TextWebSocketFrame generateErrorResponse(WebsocketMessage ws){
+    public static TextWebSocketFrame generateResponse(WebsocketMessage ws){
         return new TextWebSocketFrame(JSONObject.toJSONString(ws));
     }
 }
