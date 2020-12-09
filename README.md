@@ -63,6 +63,7 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 ![gif2](README/pic/websocketSend.gif)
 
 # 消息解析
+### http
 {
 	"to": ["1607080309668","1607071389121"],
 	"msg": {
@@ -71,10 +72,27 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 	},
 	"sendToAll": false
 }
-
-{"activeTime":1607080644685,"from":"system","messageId":"725cf41a5798474fb31a1258bed2d5d8","msg":{"key1":"value","key2":"value2"},"requestId":"f231012a-b2ed-40b1-841a-45538dc48ee1","sessionId":"172.31.236.11:9000_1607080309668_20201204191140","to":"1607080309668","trigger":1,"type":1}  
-
-
+### websocket
+{"activeTime":1607080644685,"from":"system","messageId":"725cf41a5798474fb31a1258bed2d5d8","msg":{"key1":"value","key2":"value2"},"requestId":"f231012a-b2ed-40b1-841a-45538dc48ee1","sessionId":"172.31.236.11:9000_1607080309668_20201204191140","to":"1607080309668","trigger":1,"msgType":1}  
+## 客户端收到的websocket消息详解
+| 值 |  意义  |
+| -- | ---- |
+| activeTime | 发生时间 |
+| from | 消息来源 |
+| messageId | 唯一消息id，用于回执重发保证送达率（暂未实现） |
+| requestId | 请求id，以http形式触发的时候会存在，用于写es统计 |     
+| sessionId | 会话id，在一次连接中保持一致，用于写es统计 |
+| msg | 具体推送的消息内容 |
+| to | 推送的目的地（客户端标识） |
+| trigger | 消息触发方式（http或者websocket） |
+| msgType | //错误代码ERROR(-1,"error"),//连接类型消息CONNECTION(0,"connection"),
+	//发送的业务类型消息BUSSINESS(1,"bussiness"),
+        //发送的业务类型消息的回执
+        BUSSINESS_ACK(2,"bussiness_ack"),
+        //心跳类型
+        HEARTBEAT(3,"heartbeat"),
+        //心跳类型回执
+        HEARTBEAT_ACK(4,"heartbeat_ack");|
 
 # 如何贡献
 
