@@ -57,7 +57,10 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 * 结合客户端收到消息的回执和在推送流程中的埋点，接入ELK组件实现对消息送达率，客户端会话时长的统计
 
 # 效果图
-![gif](README/pic/send.gif)
+## 以http形式触发的推送
+![gif](README/pic/httpSend.gif)
+## 以websocket形式触发的推送
+![gif2](README/pic/websocketSend.gif)
 
 # 消息解析
 {
