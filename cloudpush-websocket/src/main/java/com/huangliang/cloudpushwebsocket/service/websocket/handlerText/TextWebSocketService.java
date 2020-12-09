@@ -3,6 +3,7 @@ package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
+import com.huangliang.cloudpushwebsocket.constants.MessageConstants;
 import com.huangliang.cloudpushwebsocket.service.websocket.IWebSocketService;
 import com.huangliang.cloudpushwebsocket.util.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
@@ -32,9 +33,10 @@ public class TextWebSocketService implements IWebSocketService {
         }
         Channel channel = ctx.channel();
         String channelId = channel.attr(AttrConstants.channelId).get();
+        String sessionId = channel.attr(AttrConstants.sessionId).get();
         log.info("receive[{}]:" + str,channelId);
         //按规定规则解析消息
-        WebsocketMessage msg = init(str,channelId);
+        WebsocketMessage msg = init(str,channelId,sessionId);
         if(msg == null){
             ctx.channel().writeAndFlush(errorResponse(channel,str));
             return ;
@@ -49,10 +51,11 @@ public class TextWebSocketService implements IWebSocketService {
      * @param channelId
      * @return
      */
-    private WebsocketMessage init(String str,String channelId) {
+    private WebsocketMessage init(String str,String channelId,String sessionId) {
         try {
             WebsocketMessage msg = JSONObject.parseObject(str, WebsocketMessage.class);
             msg.setFrom(channelId);//设置消息来源
+            msg.setSessionId(sessionId);
             msg.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);//设置触发类型为websocket形式
             return msg;
         } catch (Exception e) {
@@ -62,6 +65,10 @@ public class TextWebSocketService implements IWebSocketService {
     }
 
     private TextWebSocketFrame errorResponse(Channel channel,String str){
-        return WebsocketMessageGenerateUtils.generateResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel,str));
+        return WebsocketMessageGenerateUtils.generateResponse(
+                WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(
+                        channel,
+                        MessageConstants.ParseError,
+                        str));
     }
 }

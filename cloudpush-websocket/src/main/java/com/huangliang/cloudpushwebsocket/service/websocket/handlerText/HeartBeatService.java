@@ -33,7 +33,7 @@ public class HeartBeatService implements IMessageService {
      * @return
      */
     private WebsocketMessage getFrame(WebsocketMessage websocketMessage){
-        websocketMessage.setType(WebsocketMessage.Type.HEARTBEAT_ACK.code);
+        websocketMessage.setMsgType(WebsocketMessage.MsgType.HEARTBEAT_ACK.code);
         websocketMessage.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);
         return websocketMessage;
     }

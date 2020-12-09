@@ -30,8 +30,8 @@ public class WebsocketMessageGenerateUtils {
     public static WebsocketMessage generateWebsocketMessage(String channelId,String requestId,String msgId,JSONObject msgJson){
         WebsocketMessage websocketMsg = new WebsocketMessage(
                 msgId,
-                WebsocketMessage.Type.BUSSINESS.code,
-                channelId,
+                WebsocketMessage.MsgType.BUSSINESS.code,
+                new String[]{channelId},
                 msgJson,
                 Constants.SYSTEM,
                 WebsocketMessage.Trigger.HTTP.code
@@ -40,24 +40,22 @@ public class WebsocketMessageGenerateUtils {
     }
 
     //根据请求中的参数构建发送消息
-    public static WebsocketMessage generateErrorWebsocketMessage(Channel channel,String str){
+    public static WebsocketMessage generateErrorWebsocketMessage(Channel channel,String format,Object... args){
         WebsocketMessage websocketMsg = new WebsocketMessage();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constants.SYSTEM, String.format(MessageConstants.ParseErrorSuccess,str));
-        websocketMsg.setMsg(jsonObject);
+        websocketMsg.setResultMsg(String.format(format,args));
         websocketMsg.setSessionId(channel.attr(AttrConstants.sessionId).get());
         websocketMsg.setFrom(Constants.SYSTEM);
         websocketMsg.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);
+        websocketMsg.setMsgType(WebsocketMessage.MsgType.ERROR.code);
         return websocketMsg;
     }
 
     public static WebsocketMessage generateShakeHands(Channel channel){
         WebsocketMessage websocketMsg = new WebsocketMessage();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constants.SYSTEM, String.format(MessageConstants.ShakeSuccess,channel.attr(AttrConstants.channelId).get()));
-        websocketMsg.setMsg(jsonObject);
+        websocketMsg.setResultMsg(String.format(MessageConstants.ShakeSuccess,channel.attr(AttrConstants.channelId).get()));
         websocketMsg.setSessionId(channel.attr(AttrConstants.sessionId).get());
         websocketMsg.setFrom(Constants.SYSTEM);
+        websocketMsg.setMsgType(WebsocketMessage.MsgType.CONNECTION.code);
         websocketMsg.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);
         return websocketMsg;
     }

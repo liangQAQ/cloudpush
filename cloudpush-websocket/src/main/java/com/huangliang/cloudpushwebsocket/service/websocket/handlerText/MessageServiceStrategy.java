@@ -2,6 +2,7 @@ package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
 import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.entity.WebsocketMessage;
+import com.huangliang.cloudpushwebsocket.constants.MessageConstants;
 import com.huangliang.cloudpushwebsocket.util.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -28,13 +29,13 @@ public class MessageServiceStrategy {
     @PostConstruct
     public void init(){
         //处理业务逻辑的消息
-        map.put(WebsocketMessage.Type.BUSSINESS.code,bussinessService);
+        map.put(WebsocketMessage.MsgType.BUSSINESS.code,bussinessService);
         //处理心跳的消息
-        map.put(WebsocketMessage.Type.HEARTBEAT.code,heartBeatService);
+        map.put(WebsocketMessage.MsgType.HEARTBEAT.code,heartBeatService);
     }
 
     public void handler(Channel channel, WebsocketMessage websocketMessage){
-        IMessageService service = map.get(websocketMessage.getType());
+        IMessageService service = map.get(websocketMessage.getMsgType());
         if(service == null){
             log.info("无法解析的消息类型:"+websocketMessage.toString());
             channel.writeAndFlush(generate(channel,websocketMessage));
@@ -44,6 +45,10 @@ public class MessageServiceStrategy {
     }
 
     private TextWebSocketFrame generate(Channel channel, WebsocketMessage str){
-        return WebsocketMessageGenerateUtils.generateResponse(WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(channel, JSONObject.toJSONString(str)));
+        return WebsocketMessageGenerateUtils.generateResponse(
+                WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(
+                        channel,
+                        MessageConstants.ParseError,
+                        JSONObject.toJSONString(str)));
     }
 }

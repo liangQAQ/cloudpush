@@ -1,11 +1,14 @@
 package com.huangliang.cloudpushwebsocket.service.websocket.handlerText;
 
+import com.alibaba.fastjson.JSONObject;
 import com.huangliang.api.constants.CommonConsts;
 import com.huangliang.api.entity.WebsocketMessage;
 import com.huangliang.api.util.RedisUtils;
 import com.huangliang.cloudpushwebsocket.config.ComConfig;
 import com.huangliang.cloudpushwebsocket.constants.AttrConstants;
+import com.huangliang.cloudpushwebsocket.constants.MessageConstants;
 import com.huangliang.cloudpushwebsocket.service.message.MessageSendService;
+import com.huangliang.cloudpushwebsocket.util.WebsocketMessageGenerateUtils;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +37,7 @@ public class BussinessService implements IMessageService {
         if(!checkWsMessage(channel,websocketMessage)){
             return ;
         }
-        String arr[] = websocketMessage.getTo().split(CommonConsts.COMMA_FLAG);
+        String arr[] = websocketMessage.getTo();
         List<String> toClients = Arrays.asList(arr);
         Map<String,List<String>> hostClientsMap = new HashMap<>();
         List<Object> pipeResult = redisTemplate.executePipelined(RedisUtils.getClientHostByClientFromRedis(toClients));
@@ -65,13 +68,18 @@ public class BussinessService implements IMessageService {
     }
 
     private boolean checkWsMessage(Channel channel,WebsocketMessage websocketMessage) {
-        String sendTo = websocketMessage.getTo();
-        if(StringUtils.isEmpty(sendTo)){
+        String[] to = websocketMessage.getTo();
+        if(to == null || to.length == 0){
+            channel.writeAndFlush(
+                    WebsocketMessageGenerateUtils.generateErrorWebsocketMessage(
+                            channel,
+                            MessageConstants.NoSendToError,
+                            JSONObject.toJSONString(websocketMessage)));
             log.info("目标对象为空"+websocketMessage);
             return false;
         }
         websocketMessage.setTrigger(WebsocketMessage.Trigger.WEBSOCKET.code);
-        websocketMessage.setType(WebsocketMessage.Type.BUSSINESS.code);
+        websocketMessage.setMsgType(WebsocketMessage.MsgType.BUSSINESS.code);
         websocketMessage.setFrom(channel.attr(AttrConstants.channelId).get());
         return true;
     }

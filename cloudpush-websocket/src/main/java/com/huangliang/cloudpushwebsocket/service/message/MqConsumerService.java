@@ -71,8 +71,8 @@ public class MqConsumerService extends AbstractRocketMqConsumer<RocketMqTopic, R
                 request.getRequestId(),
                 channelService.get(channelId).attr(AttrConstants.sessionId).get(),
                 UUIDUtils.getUUID(),
-                WebsocketMessage.Type.BUSSINESS.code,
-                channelId,
+                WebsocketMessage.MsgType.BUSSINESS.code,
+                new String[]{channelId},
                 request.getMsg(),
                 request.getFrom(),
                 Integer.parseInt(msg.getUserProperty(Constants.Trigger))

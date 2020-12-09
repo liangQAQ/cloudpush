@@ -8,8 +8,6 @@ public interface Constants {
 
     String ROCKETMQ_GROUP_PREFIX = "group";
 
-    String WEBSOCKET = "websocket";
-
     String UPGRADE = "Upgrade";
 
     String SYSTEM = "system";

@@ -25,10 +25,10 @@ public class WebsocketMessage implements Serializable {
     private String messageId;
     //消息的类型
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
-    private Integer type;
-    //目标客户端标识(多个以,隔开)
+    private Integer msgType;
+    //目标客户端标识
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
-    private String to;
+    private String[] to;
     //消息内容
     @JsonInclude(value=JsonInclude.Include.NON_NULL)
     private JSONObject msg;
@@ -39,21 +39,23 @@ public class WebsocketMessage implements Serializable {
     private Integer trigger;
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date activeTime = new Date();
+    //错误信息
+    private String resultMsg;
 
-    public WebsocketMessage(String messageId, Integer type, String to, JSONObject msg, String from, Integer trigger) {
+    public WebsocketMessage(String messageId, Integer type, String[] to, JSONObject msg, String from, Integer trigger) {
         this.messageId = messageId;
-        this.type = type;
+        this.msgType = type;
         this.to = to;
         this.msg = msg;
         this.from = from;
         this.trigger = trigger;
     }
 
-    public WebsocketMessage(String requestId, String sessionId, String messageId, Integer type, String to, JSONObject msg, String from, Integer trigger) {
+    public WebsocketMessage(String requestId, String sessionId, String messageId, Integer type, String[] to, JSONObject msg, String from, Integer trigger) {
         this.requestId = requestId;
         this.sessionId = sessionId;
         this.messageId = messageId;
-        this.type = type;
+        this.msgType = type;
         this.to = to;
         this.msg = msg;
         this.from = from;
@@ -61,7 +63,7 @@ public class WebsocketMessage implements Serializable {
     }
 
     //消息类型标识
-    public enum Type {
+    public enum MsgType {
         //错误代码
         ERROR(-1,"error"),
         //发送的业务类型消息
@@ -78,7 +80,7 @@ public class WebsocketMessage implements Serializable {
         public Integer code;
         public String info;
 
-        Type(Integer code, String info){
+        MsgType(Integer code, String info){
             this.code = code;
             this.info = info;
         }
