@@ -85,14 +85,7 @@ cloudpush是我对于springcloud微服务框架的一个学习实践，旨在学
 | msg | 具体推送的消息内容 |
 | to | 推送的目的地（客户端标识） |
 | trigger | 消息触发方式（http或者websocket） |
-| msgType | //错误代码ERROR(-1,"error"),//连接类型消息CONNECTION(0,"connection"),
-	//发送的业务类型消息BUSSINESS(1,"bussiness"),
-        //发送的业务类型消息的回执
-        BUSSINESS_ACK(2,"bussiness_ack"),
-        //心跳类型
-        HEARTBEAT(3,"heartbeat"),
-        //心跳类型回执
-        HEARTBEAT_ACK(4,"heartbeat_ack");|
+| msgType | //错误代码ERROR(-1,"error"),//连接类型消息CONNECTION(0,"connection"),//发送的业务类型消息BUSSINESS(1,"bussiness"),//发送的业务类型消息的回执BUSSINESS_ACK(2,"bussiness_ack"),//心跳类型HEARTBEAT(3,"heartbeat"),//心跳类型回执HEARTBEAT_ACK(4,"heartbeat_ack");|
 
 # 如何贡献
 
