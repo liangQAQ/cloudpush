@@ -40,6 +40,7 @@
             border: none;
             /* background: #B3D33F; */
             color: #fff;
+            overflow: auto;
         }
         .text{
             width: auto;
@@ -98,6 +99,7 @@
     var oConnect=document.getElementById('connect');
     var oSend=document.getElementById('send');
     var oInput=document.getElementById('message');
+    var tableHeight = document.getElementById("content").style.height;
     var ws=null;
     oConnect.onclick=function(){
         //网关
@@ -115,18 +117,24 @@
                 return ;
             }
             oUl.innerHTML+="<li class='li-server'>"+evt.data+"</li>";
+            document.getElementById("content").scrollTop = 9999;
         }
         ws.onclose=function(){
             oUl.innerHTML+="<li class='li-client'>客户端已断开连接</li>";
+            document.getElementById("content").scrollTop = 9999;
         };
         ws.onerror=function(evt){
             oUl.innerHTML+="<li class='li-client'>"+evt.data+"</li>";
+            document.getElementById("content").scrollTop = 9999;
         };
+
+
     };
     oSend.onclick=function(){
         if(ws){
             ws.send(oInput.value);
         }
+        document.getElementById("content").scrollTop = 9999;
     }
     var clear=document.getElementById('clear');
     clear.onclick=function(){
